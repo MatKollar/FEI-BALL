@@ -1,4 +1,4 @@
-/* global Bat Ball stageDatas Stage Power Sound LastBrickCrackingHandler*/
+/* global Bat Ball stageDatas Stage LastBrickCrackingHandler*/
 
 function Game(windowWidth, windowHeight, canvas, batCanvas, stageCanvas) {
 	this.windowWidth = windowWidth
@@ -20,18 +20,6 @@ function Game(windowWidth, windowHeight, canvas, batCanvas, stageCanvas) {
 	}
 	this.curState = this.state.waiting
 
-	this.powerTypes = {
-		increaseLife: 1,
-		decreaseLife: 2,
-		increaseBatSize: 3,
-		decreaseBatSize: 4,
-		increaseBallSize: 5,
-		decreaseBallSize: 6,
-		speedUpBall: 7,
-		slowDownBall: 8,
-		addOneBall: 9
-	}
-
 	this.callbacks = {
 
 	}
@@ -45,10 +33,6 @@ function Game(windowWidth, windowHeight, canvas, batCanvas, stageCanvas) {
 	// ball setup
 	this.balls = []
 	this.balls.push(new Ball())
-
-	// power setup
-	this.currentPower = undefined
-	this.powerProvider = this.roundRobinPowerProvider()
 
 	// stage setup
 	this.initialStageSetup(windowWidth, windowHeight, stageCanvas)
@@ -72,10 +56,6 @@ Game.prototype.windowResized = function (windowWidth, windowHeight) {
 		this.balls[index].windowResized(windowWidth, windowHeight)
 	}
 
-	// power update
-	if (this.currentPower) {
-		this.currentPower.windowResized()
-	}
 
 	// stage update
 	this.stage.windowResized(windowWidth, windowHeight)
@@ -136,7 +116,6 @@ Game.prototype.operateBall = function () {
 			// stage collision
 			const brickCollisionResult = this.stage.handleBrickCollisionWithBallAndReportCollision(this.balls[index])
 			if (brickCollisionResult) {
-				this.handlePowerGeneration(this.balls[index])
 				this.stage.draw()
 			}
 			this.balls[index].handleBrickCollisionResult(brickCollisionResult)
@@ -155,82 +134,8 @@ Game.prototype.operateBall = function () {
 }
 
 
-Game.prototype.operatePower = function () {
-	if (this.curState == this.state.running && this.currentPower) {
-
-		var batRect = this.bat.relativeBatRect()
-		var collide = this.currentPower.doesCollideWithBat(batRect.x, batRect.width, batRect.y)
-
-		if (collide) {
-			// Apply the power
-			// Remove the power
-			this.applyPower(this.currentPower.powerType)
-			this.currentPower = undefined
-		} else {
-			var doesCollideWithWindowBottom = this.currentPower.handleCollisionWithWindowReportBottomCollision(this.windowWidth, this.windowHeight)
-
-			if (doesCollideWithWindowBottom) {
-				this.currentPower = undefined
-			} else {
-				this.currentPower.move()
-			}
-		}
-	}
-}
-
-Game.prototype.applyPower = function (powerType) {
-	switch (powerType) {
-	case this.powerTypes.increaseLife: {
-		this.increaseLife()
-	}
-		break
-	case this.powerTypes.decreaseLife: {
-		this.decreaseLife()
-	}
-		break
-	case this.powerTypes.increaseBatSize: {
-		this.bat.increaseSize()
-	}
-		break
-	case this.powerTypes.decreaseBatSize: {
-		this.bat.decreaseSize()
-	}
-		break
-	case this.powerTypes.increaseBallSize: {
-		for (let index = 0; index < this.balls.length; index++) {
-			this.balls[index].increaseSize()
-		}
-	}
-		break
-	case this.powerTypes.decreaseBallSize: {
-		for (let index = 0; index < this.balls.length; index++) {
-			this.balls[index].decreaseSize()
-		}
-	}
-		break
-	case this.powerTypes.speedUpBall: {
-		for (let index = 0; index < this.balls.length; index++) {
-			this.balls[index].increaseSpeed()
-		}
-	}
-		break
-	case this.powerTypes.slowDownBall: {
-		for (let index = 0; index < this.balls.length; index++) {
-			this.balls[index].decreaseSpeed()
-		}
-	}
-		break
-	case this.powerTypes.addOneBall: {
-		var lastBall = this.balls[this.balls.length - 1]
-		this.balls.push(new Ball(lastBall.centerX, lastBall.centerY, lastBall.speed, lastBall.radius))
-	}
-		break
-	}
-}
-
 Game.prototype.moveToNextStage = function () {
 
-	this.currentPower = undefined
 
 	if(this.lastBrickCrackingHandler) {
 		this.lastBrickCrackingHandler.handleStagePassed()
@@ -265,20 +170,6 @@ Game.prototype.handleLastBrickRemaining = function (lastBrickRect) {
 
 }
 
-Game.prototype.roundRobinPowerProvider = function () {
-	var nextPower = this.powerTypes.increaseLife
-	var totalPowerCount = Object.keys(this.powerTypes).length
-
-	return function () {
-		var curPowerToReturn = nextPower
-		nextPower = (nextPower + 1)
-		if (nextPower > totalPowerCount) {
-			nextPower = 1
-		}
-		return curPowerToReturn
-	}
-
-}
 
 // Give appropriate name
 Game.prototype.lastBallDroppedToBottom = function () {
@@ -304,16 +195,6 @@ Game.prototype.lastBallDroppedToBottom = function () {
 	}
 }
 
-Game.prototype.handlePowerGeneration = function (ball) {
-	// Current scheme is generating power in each ball collision with brick,
-	// in case there is no power. Powers will appear in round robin fashion
-	if (!this.currentPower) {
-
-		this.currentPower = new Power(this.powerProvider(), ball.speedX, ball.speedY, ball.centerX, ball.centerY)
-		this.currentPower.windowResized(this.windowWidth, this.windowHeight)
-	}
-}
-
 Game.prototype.on = function (event, callback) {
 	this.callbacks[event] = callback
 }
@@ -336,10 +217,6 @@ Game.prototype.draw = function () {
 
 		// Ball movement, collision reporting and handling
 		this.operateBall()
-
-		// Power movement, collision reporting and handling
-		this.operatePower()
-
 
 		// stage drawing
 		// this.stage.draw(this.ctx)

@@ -64,12 +64,4 @@ $(document).ready(function () {
 				window.alert(errMsg)
 			})
 	}
-
-	function isTokenNotFoundMoveToIndex() {
-		var token = localStorage.getItem("token")
-
-		if (!token) {
-			window.location = "/"
-		}
-	}
 })
