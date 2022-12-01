@@ -12,37 +12,43 @@ class Ball {
     this.maxSpeed = 18;
     this.minSpeed = 6;
   }
+
   increaseSize() {
     if (this.radius < this.maxRadius) {
       this.radius += 2;
     }
   }
+
   decreaseSize() {
     if (this.radius > this.minRadius) {
       this.radius -= 2;
     }
   }
+
   increaseSpeed() {
     if (this.speed < this.maxSpeed) {
       this.speed += 2;
       this.adjustNewSpeed();
     }
   }
+
   decreaseSpeed() {
     if (this.speed > this.minSpeed) {
       this.speed -= 2;
       this.adjustNewSpeed();
     }
   }
+
   initialAngleSpeedSetup(speed) {
     this.speed = speed || 10;
     this.angle = Math.PI / 4;
     this.speedX = Math.cos(this.angle) * this.speed;
     this.speedY = -Math.sin(this.angle) * this.speed;
   }
+
   adjustNewSpeed() {
-    var prevSpeedX = this.speedX;
-    var prevSpeedY = this.speedY;
+    let prevSpeedX = this.speedX;
+    let prevSpeedY = this.speedY;
 
     this.speedX = Math.cos(this.angle) * this.speed;
     this.speedY = Math.sin(this.angle) * this.speed;
@@ -58,28 +64,34 @@ class Ball {
       this.speedY *= -1;
     }
   }
+
   move() {
     this.centerX += this.speedX;
     this.centerY += this.speedY;
   }
+
   flipSpeedVertically() {
     this.speedY *= -1;
   }
+
   flipSpeedHorizontally() {
     this.speedX *= -1;
   }
+
   centerAfterNextMove() {
     return {
       centerX: this.centerX + this.speedX,
       centerY: this.centerY + this.speedY,
     };
   }
+
   stickBottomToPoint(posX, posY) {
     this.centerX = posX;
     this.centerY = posY - this.radius;
   }
+
   handleCollisionWithWindowReportBottomCollision(wWidth, wHeight) {
-    var nextCenter = this.centerAfterNextMove();
+    let nextCenter = this.centerAfterNextMove();
 
     // It can look optimized using one if, but this is more cleaner
     if (nextCenter.centerX - this.radius < 0) {
@@ -98,6 +110,7 @@ class Ball {
 
     return false;
   }
+
   handleBrickCollisionResult(brickCollisionResult) {
     if (brickCollisionResult) {
       if (brickCollisionResult == "top" || brickCollisionResult == "bottom") {
@@ -110,9 +123,10 @@ class Ball {
       }
     }
   }
+
   handleCollisionWithBat(batX, batWidth, batTopY) {
-    var nextCenter = this.centerAfterNextMove();
-    var ballBottomY = nextCenter.centerY + this.radius;
+    let nextCenter = this.centerAfterNextMove();
+    let ballBottomY = nextCenter.centerY + this.radius;
     if (
       ballBottomY > batTopY &&
       batX < nextCenter.centerX &&
@@ -121,14 +135,14 @@ class Ball {
       //				   BAT
       //	150 			90				30
       //  Left 		  Middle			Right
-      var batRightMostRadian = 0.523599; // 30 Degree
-      var batLeftMostRadian = 2.61799; // 150 Degree
-      var nintyDegreeInRadian = Math.PI / 2;
-      var seventySixDegreeInRadian = 1.32645; // 76 Degree
-      var hundredAndFourDegreeInRadian = 1.81514; // 104 Degree
+      let batRightMostRadian = 0.523599; // 30 Degree
+      let batLeftMostRadian = 2.61799; // 150 Degree
+      let nintyDegreeInRadian = Math.PI / 2;
+      let seventySixDegreeInRadian = 1.32645; // 76 Degree
+      let hundredAndFourDegreeInRadian = 1.81514; // 104 Degree
 
-      var angleDeviation = batLeftMostRadian - batRightMostRadian;
-      var collisionDeviation = batX + batWidth - nextCenter.centerX;
+      let angleDeviation = batLeftMostRadian - batRightMostRadian;
+      let collisionDeviation = batX + batWidth - nextCenter.centerX;
 
       // Simple interpolation
       this.angle =
@@ -153,6 +167,7 @@ class Ball {
       return true;
     }
   }
+
   windowResized(wWidth, wHeight) {
     if (this.centerX - this.radius < 0) {
       this.centerX = this.radius;
@@ -170,6 +185,7 @@ class Ball {
       this.centerY = wHeight - this.radius;
     }
   }
+
   draw(ctx) {
     ctx.fillStyle = "#FFA500";
     ctx.beginPath();
@@ -177,6 +193,7 @@ class Ball {
     ctx.closePath();
     ctx.fill();
   }
+
   // returns hit direction `top`, `bottom`, `left`, `right`
   calculateHitDirectionWithRect(rect) {
     const nextCenter = this.centerAfterNextMove();

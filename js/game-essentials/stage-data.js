@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
 
 // Stage datas is array of each stage information.
 //  It is 20 x 20 grid.
-// `1` represent it will take one hit to diminish (colored GREEN)
-// `2` represent it will take two hit to diminish (colored BLUE)
-// `3` represent it will take three hit to diminish (colored RED)
-var stageDatas = [
+let stageDatas = [
   // {
   // 	name : "Dummy (Stage 1)",
   // 	col: 15,
@@ -85,5 +81,3 @@ var stageDatas = [
     ],
   },
 ];
-
-/* eslint-enable no-unused-vars */

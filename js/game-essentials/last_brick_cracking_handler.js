@@ -1,11 +1,9 @@
-/* global Timer interpolate Thunder */
-
 class LastBrickCrackingHandler {
   constructor(timeout, lastBrickRect) {
     // timer setup
     this.timeout = timeout;
     this.timer = new Timer(this.timeout);
-    var self = this;
+    let self = this;
     this.timer.on("end", function () {
       self.handleTimerEnd();
     });
@@ -13,26 +11,24 @@ class LastBrickCrackingHandler {
       self.handleTimerUpdate();
     });
 
-    var lastBrickCenterPoint = {
-      x: lastBrickRect.x + lastBrickRect.width / 2,
-      y: lastBrickRect.y + lastBrickRect.height / 2,
-    };
-
     this.callbacks = {};
   }
+
   handleStagePassed() {
     if (this.timer) {
       this.timer.stop();
       this.timer = undefined;
     }
   }
+
   handleTimerEnd() {
     if (this.callbacks["end"]) {
       this.callbacks["end"]();
     }
   }
+
   handleTimerUpdate() {
-    var newVolume = interpolate(
+    let newVolume = interpolate(
       0,
       this.timeout,
       this.baseVolume,
@@ -41,15 +37,12 @@ class LastBrickCrackingHandler {
     );
     console.log(newVolume);
   }
+
   on(event, callback) {
     this.callbacks[event] = callback;
   }
+
   remainingSeconds() {
     return this.timer.remainingSeconds();
-  }
-  draw(ctx) {
-    if (this.timer.remainingSeconds() < 1) {
-      // draw thunder for last 1 seconds
-    }
   }
 }

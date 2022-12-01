@@ -9,7 +9,7 @@ class Bat {
 
     this.margin = 5;
 
-    var height = 20;
+    let height = 20;
 
     this.rect = {
       x: this.margin,
@@ -34,6 +34,7 @@ class Bat {
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
     this.ctx.canvas.style.position = "absolute";
   }
+
   increaseSize() {
     if (this.widthPercentageOfWindow < this.maxPercentage) {
       this.widthPercentageOfWindow += 2;
@@ -41,6 +42,7 @@ class Bat {
         (this.windowWidth / 100.0) * this.widthPercentageOfWindow;
     }
   }
+
   decreaseSize() {
     if (this.widthPercentageOfWindow > this.minPercentage) {
       this.widthPercentageOfWindow -= 2;
@@ -48,6 +50,7 @@ class Bat {
         (this.windowWidth / 100.0) * this.widthPercentageOfWindow;
     }
   }
+
   windowResized(windowWidth, windowHeight) {
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
@@ -61,11 +64,13 @@ class Bat {
     this.repositionBatInsideWindow();
     this.draw();
   }
+
   mouseMoved(cursorX) {
     this.rect.x = cursorX - this.rect.width / 2;
     this.repositionBatInsideWindow();
     this.draw();
   }
+
   repositionBatInsideWindow() {
     // Bat is out of the window - left side
     if (this.rect.x < this.margin) {
@@ -77,6 +82,7 @@ class Bat {
       this.rect.x = this.windowWidth - this.rect.width - this.margin;
     }
   }
+
   draw() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
 
@@ -89,12 +95,14 @@ class Bat {
       this.rect.height
     );
   }
+
   centerTop() {
     return {
       x: this.rect.x + this.rect.width / 2.0,
       y: this.canvasRect.y,
     };
   }
+
   relativeBatRect() {
     return {
       x: this.rect.x,

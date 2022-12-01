@@ -25,6 +25,7 @@ class Stage {
 
     this.draw();
   }
+
   windowResized(windowWidth, windowHeight) {
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
@@ -34,12 +35,13 @@ class Stage {
 
     this.draw();
   }
+
   draw() {
     this.clearDrawing();
 
     const self = this;
-    var brickCount = 0;
-    var brickRect = undefined;
+    let brickCount = 0;
+    let brickRect = undefined;
     this.traverseBricks(function (brickValue, x, y, width, height) {
       if (brickValue > 0) {
         brickCount++;
@@ -60,17 +62,19 @@ class Stage {
       this.callbacks["last_brick"](brickRect);
     }
   }
+
   clearDrawing() {
     // this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
     this.ctx.fillStyle = "#000000";
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
+
   // It will return next ball hit direction
   // "top", "bottom", "left", "right"
   handleBrickCollisionWithBallAndReportCollision(ball) {
     // ball is within stage rectangle, now check for each brick to have collision with ball or not
-    var self = this;
-    var collideResult = undefined;
+    let self = this;
+    let collideResult = undefined;
     this.traverseBricks(function (brickValue, x, y, width, height, row, col) {
       if (brickValue > 0) {
         const collide = ball.calculateHitDirectionWithRect({
@@ -92,6 +96,7 @@ class Stage {
 
     return collideResult;
   }
+
   traverseBricks(callback) {
     const availableWidth =
       this.windowWidth - this.margin.left - this.margin.right;
@@ -104,7 +109,7 @@ class Stage {
     for (let row = 0; row < this.stageData.row; row++) {
       for (let col = 0; col < this.stageData.col; col++) {
         const brickValue = this.stageData.data[row][col];
-        var stopIterating = callback(
+        let stopIterating = callback(
           brickValue,
           curX,
           curY,
@@ -124,9 +129,11 @@ class Stage {
       curY += this.stageData.brickHeight + this.stageData.gap.vertical;
     }
   }
+
   setNewStageData(stageData) {
     this.stageData = stageData;
   }
+
   on(event, callback) {
     this.callbacks[event] = callback;
   }

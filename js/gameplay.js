@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // setup gameplay
-  var game = new Game(
+  let game = new Game(
     window.innerWidth,
     window.innerHeight,
     $("#canvas")[0],
@@ -8,7 +8,7 @@ $(document).ready(function () {
     $("#stage_canvas")[0]
   );
   const fps = 60;
-  var intervalId = setInterval(gameloop, 1000 / fps);
+  let intervalId = setInterval(gameloop, 1000 / fps);
 
   // Events
   function gameloop() {
@@ -37,14 +37,6 @@ $(document).ready(function () {
       updateScore(score);
       $("#main_menu_btn").show().removeClass("d-none");
     }, 500);
-
-    // Alternate interesting implementation,
-    // clearInterval(intervalId)
-    // setTimeout(function () {
-    // 	game.draw()
-    // 	updateScore(score)
-    // 	$("#main_menu_btn").show().removeClass("d-none")
-    // }, 1000)
   });
 
   game.on("no_more_life", function (score) {

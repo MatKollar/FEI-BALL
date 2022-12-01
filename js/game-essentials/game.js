@@ -1,5 +1,3 @@
-/* global Bat Ball stageDatas Stage LastBrickCrackingHandler*/
-
 class Game {
   constructor(windowWidth, windowHeight, canvas, batCanvas, stageCanvas) {
     this.windowWidth = windowWidth;
@@ -22,7 +20,7 @@ class Game {
 
     this.callbacks = {};
 
-    this.lifeCount = 2;
+    this.lifeCount = 3;
 
     // bat setup
     this.bat = new Bat(windowWidth, windowHeight, batCanvas);
@@ -35,6 +33,7 @@ class Game {
     // stage setup
     this.initialStageSetup(windowWidth, windowHeight, stageCanvas);
   }
+
   windowResized(windowWidth, windowHeight) {
     // keep reference
     this.windowWidth = windowWidth;
@@ -48,16 +47,18 @@ class Game {
     this.bat.windowResized(windowWidth, windowHeight);
 
     // ball update
-    for (var index = 0; index < this.balls.length; index++) {
+    for (let index = 0; index < this.balls.length; index++) {
       this.balls[index].windowResized(windowWidth, windowHeight);
     }
 
     // stage update
     this.stage.windowResized(windowWidth, windowHeight);
   }
+
   mouseMoved(cursorX) {
     this.bat.mouseMoved(cursorX);
   }
+
   initialStageSetup(windowWidth, windowHeight, stageCanvas) {
     this.currentStage = 0;
     this.stage = new Stage(
@@ -66,7 +67,7 @@ class Game {
       stageDatas[this.currentStage],
       stageCanvas
     );
-    var self = this;
+    let self = this;
     this.stage.on("end", function () {
       self.moveToNextStage();
     });
@@ -75,6 +76,7 @@ class Game {
       self.handleLastBrickRemaining(lastBrickRect);
     });
   }
+
   startGame() {
     this.curState = this.state.running;
 
@@ -85,19 +87,20 @@ class Game {
     ) {
     }
   }
+
   operateBall() {
     if (this.curState == this.state.waiting) {
       // Ball will stick to the bat
-      var batTopCenter = this.bat.centerTop();
-      for (var index = 0; index < this.balls.length; index++) {
+      let batTopCenter = this.bat.centerTop();
+      for (let index = 0; index < this.balls.length; index++) {
         this.balls[index].stickBottomToPoint(batTopCenter.x, batTopCenter.y);
       }
     } else {
       // Ball will be moving in each frame
-      var extraBallsDroppedToBottom = [];
-      for (index = 0; index < this.balls.length; index++) {
+      let extraBallsDroppedToBottom = [];
+      for (let index = 0; index < this.balls.length; index++) {
         // window collision
-        var bottomCollided = this.balls[
+        let bottomCollided = this.balls[
           index
         ].handleCollisionWithWindowReportBottomCollision(
           this.windowWidth,
@@ -113,7 +116,7 @@ class Game {
         }
 
         // bat collision
-        var batRect = this.bat.relativeBatRect();
+        let batRect = this.bat.relativeBatRect();
         const ballBatCollided = this.balls[index].handleCollisionWithBat(
           batRect.x,
           batRect.width,
@@ -136,14 +139,15 @@ class Game {
         this.balls[index].move();
       }
 
-      for (index = 0; index < extraBallsDroppedToBottom.length; index++) {
-        var ballIndex = this.balls.indexOf(extraBallsDroppedToBottom[index]);
+      for (let index = 0; index < extraBallsDroppedToBottom.length; index++) {
+        let ballIndex = this.balls.indexOf(extraBallsDroppedToBottom[index]);
         if (ballIndex > -1) {
           this.balls.splice(ballIndex, 1);
         }
       }
     }
   }
+
   moveToNextStage() {
     if (this.lastBrickCrackingHandler) {
       this.lastBrickCrackingHandler.handleStagePassed();
@@ -163,6 +167,7 @@ class Game {
       this.stage.clearDrawing();
     }
   }
+
   handleLastBrickRemaining(lastBrickRect) {
     if (!this.lastBrickCrackingHandler && this.curState == this.state.running) {
       console.log("handle last brick remaining called");
@@ -170,16 +175,16 @@ class Game {
         30,
         lastBrickRect
       );
-      var self = this;
+      let self = this;
       this.lastBrickCrackingHandler.on("end", function () {
         self.lastBrickCrackingHandler = undefined;
         self.moveToNextStage();
       });
     }
   }
+
   // Give appropriate name
   lastBallDroppedToBottom() {
-    this.currentPower = undefined;
     this.curState = this.state.waiting;
     this.lifeCount--;
 
@@ -200,13 +205,12 @@ class Game {
       }
     }
   }
+
   on(event, callback) {
     this.callbacks[event] = callback;
   }
+
   draw() {
-    // clear screen
-    // this.ctx.fillStyle = "#000000"
-    // this.ctx.fillRect(0, 0, this.windowWidth, this.windowHeight)
     this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight);
 
     if (
@@ -224,43 +228,33 @@ class Game {
       // Ball movement, collision reporting and handling
       this.operateBall();
 
-      // stage drawing
-      // this.stage.draw(this.ctx)
-      // power drawing
-      if (this.currentPower) {
-        this.currentPower.draw(this.ctx);
-      }
-
       // ball drawing
-      for (var index = 0; index < this.balls.length; index++) {
+      for (let index = 0; index < this.balls.length; index++) {
         this.balls[index].draw(this.ctx);
-      }
-
-      // thunder drawing
-      if (this.lastBrickCrackingHandler) {
-        this.lastBrickCrackingHandler.draw(this.ctx);
       }
 
       // last brick remaining time
       this.drawLastBrickRemainingTime();
     }
   }
+
   drawLife() {
-    var heartImage = document.getElementById("heart_image");
+    let heartImage = document.getElementById("heart_image");
 
-    var margin = 10;
-    var width = 40;
-    var height = 40;
+    let margin = 10;
+    let width = 40;
+    let height = 40;
 
-    var curX = this.windowWidth - margin - width;
+    let curX = this.windowWidth - margin - width;
 
-    for (var index = 0; index < this.lifeCount; index++) {
+    for (let index = 0; index < this.lifeCount; index++) {
       this.ctx.drawImage(heartImage, curX, margin, width, height);
       curX -= margin + width;
     }
   }
+
   drawScore() {
-    var margin = 10;
+    let margin = 10;
 
     this.ctx.fillStyle = "#FFFFFF";
     this.ctx.font = "30px Comic Sans MS";
@@ -268,8 +262,9 @@ class Game {
     this.ctx.textAlign = "left";
     this.ctx.fillText(`Score : ${this.stage.score}`, margin, margin);
   }
+
   drawStageName() {
-    var margin = 10;
+    let margin = 10;
 
     this.ctx.fillStyle = "#FFFFFF";
     this.ctx.font = "30px Comic Sans MS";
@@ -281,13 +276,15 @@ class Game {
       margin
     );
   }
-  drawGameOver() {
-    var gameOverImage = document.getElementById("game_over_image");
 
-    var imageX = (this.windowWidth - gameOverImage.width) / 2;
+  drawGameOver() {
+    let gameOverImage = document.getElementById("game_over_image");
+
+    let imageX = (this.windowWidth - gameOverImage.width) / 2;
 
     this.ctx.drawImage(gameOverImage, imageX, 50);
   }
+
   drawLastBrickRemainingTime() {
     if (this.lastBrickCrackingHandler) {
       this.ctx.fillStyle = "#FF0000";
@@ -301,12 +298,7 @@ class Game {
       );
     }
   }
-  increaseLife() {
-    var maxLife = 5; // So far it's here, no one other required it. If required place it in a suitable place
-    if (this.lifeCount < maxLife) {
-      this.lifeCount++;
-    }
-  }
+
   decreaseLife() {
     this.lastBallDroppedToBottom();
   }
