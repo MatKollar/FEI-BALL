@@ -18,12 +18,6 @@ function LastBrickCrackingHandler( timeout, lastBrickRect ) {
 		x : lastBrickRect.x + lastBrickRect.width/2,
 		y : lastBrickRect.y + lastBrickRect.height/2
 	}
-	this.thunder = new Thunder({
-		x: lastBrickCenterPoint.x,
-		y : 0
-	}, lastBrickCenterPoint)
-
-
 
 	this.callbacks = {
 
@@ -61,6 +55,6 @@ LastBrickCrackingHandler.prototype.remainingSeconds = function() {
 
 LastBrickCrackingHandler.prototype.draw = function(ctx) {
 	if(this.timer.remainingSeconds() < 1) {	// draw thunder for last 1 seconds
-		this.thunder.draw(ctx)
+		
 	}
 }
