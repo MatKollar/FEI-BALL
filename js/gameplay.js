@@ -1,5 +1,3 @@
-/* global $ Game Api */
-
 $(document).ready(function () {
   // setup gameplay
   var game = new Game(
@@ -52,23 +50,7 @@ $(document).ready(function () {
   game.on("no_more_life", function (score) {
     setTimeout(function () {
       clearInterval(intervalId);
-      updateScore(score);
       $("#main_menu_btn").show().removeClass("d-none");
     }, 500);
   });
-
-  function updateScore(score) {
-    var token = localStorage.getItem("token");
-    api.updateScore(
-      score,
-      token,
-      function (res) {
-        const msg = res.messages.en;
-        window.alert(msg);
-      },
-      function (errMsg) {
-        window.alert(errMsg);
-      }
-    );
-  }
 });
