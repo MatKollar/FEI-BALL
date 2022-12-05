@@ -14,14 +14,15 @@ class Stage {
 
     this.score = 0;
 
-    this.ctx = canvas.getContext("2d", {
-      alpha: false,
-    });
-    this.ctx.canvas.width = windowWidth;
-    this.ctx.canvas.height = windowHeight;
-    this.ctx.canvas.style.left = "0px";
-    this.ctx.canvas.style.top = "0px";
+    this.ctx = canvas.getContext("2d", { alpha: false });
+    const { left, top, width, height } = canvas.getBoundingClientRect();
+    this.ctx.canvas.width = width;
+    this.ctx.canvas.height = height;
+    this.ctx.canvas.style.left = `${left}px`;
+    this.ctx.canvas.style.top = `${top}px`;
     this.ctx.canvas.style.position = "absolute";
+
+    window.addEventListener("resize", () => this.onResize());
 
     this.draw();
   }
@@ -38,21 +39,15 @@ class Stage {
 
   draw() {
     this.clearDrawing();
-
-    const self = this;
     let brickCount = 0;
     let brickRect = undefined;
-    this.traverseBricks(function (brickValue, x, y, width, height) {
+
+    this.traverseBricks((brickValue, x, y, width, height) => {
       if (brickValue > 0) {
         brickCount++;
-        brickRect = {
-          x: x,
-          y: y,
-          width: width,
-          height: height,
-        };
-        self.ctx.fillStyle = self.stageData.colorByType[brickValue];
-        self.ctx.fillRect(x, y, width, height);
+        brickRect = { x, y, width, height };
+        this.ctx.fillStyle = this.stageData.colorByType[brickValue];
+        this.ctx.fillRect(x, y, width, height);
       }
     });
 
@@ -64,7 +59,6 @@ class Stage {
   }
 
   clearDrawing() {
-    // this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height)
     this.ctx.fillStyle = "#000000";
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
@@ -83,7 +77,6 @@ class Stage {
           width: width,
           height: height,
         });
-
         if (collide) {
           // decrease brick value by one
           self.score++;
@@ -93,23 +86,28 @@ class Stage {
         }
       }
     });
-
     return collideResult;
   }
 
-  traverseBricks(callback) {
+  traverseBricks(iterationCallback) {
+    // Calculate the dimensions of the bricks
     const availableWidth =
       this.windowWidth - this.margin.left - this.margin.right;
     const brickWidth =
       availableWidth / this.stageData.col - this.stageData.gap.horizontal;
 
-    let curX = this.margin.left;
-    let curY = this.margin.top;
+    // Loop through each row and column of bricks
+    for (const [row, bricks] of this.stageData.data.entries()) {
+      let curY =
+        this.margin.top +
+        row * (this.stageData.brickHeight + this.stageData.gap.vertical);
 
-    for (let row = 0; row < this.stageData.row; row++) {
-      for (let col = 0; col < this.stageData.col; col++) {
-        const brickValue = this.stageData.data[row][col];
-        let stopIterating = callback(
+      for (const [col, brickValue] of bricks.entries()) {
+        let curX =
+          this.margin.left + col * (brickWidth + this.stageData.gap.horizontal);
+
+        // Call the iteration callback function with the current brick's value, position, and dimensions
+        const stopIterating = iterationCallback(
           brickValue,
           curX,
           curY,
@@ -119,14 +117,11 @@ class Stage {
           col
         );
 
+        // Stop iterating if the callback returned true
         if (stopIterating) {
           return;
         }
-
-        curX += brickWidth + this.stageData.gap.horizontal;
       }
-      curX = this.margin.left;
-      curY += this.stageData.brickHeight + this.stageData.gap.vertical;
     }
   }
 

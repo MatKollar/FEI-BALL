@@ -1,6 +1,6 @@
 $(document).ready(function () {
   // setup gameplay
-  let game = new Game(
+  const game = new Game(
     window.innerWidth,
     window.innerHeight,
     $("#canvas")[0],
@@ -8,41 +8,42 @@ $(document).ready(function () {
     $("#stage_canvas")[0]
   );
   const fps = 60;
-  let intervalId = setInterval(gameloop, 1000 / fps);
+  const intervalId = setInterval(gameloop, 1000 / fps);
 
-  // Events
-  function gameloop() {
-    game.draw();
-  }
-
-  $(window).resize(function () {
+  // Event listeners
+  $(window).resize(() => {
     game.windowResized(window.innerWidth, window.innerHeight);
   });
 
-  $("body").mousemove(function (event) {
+  $("body").mousemove((event) => {
     game.mouseMoved(event.clientX);
   });
 
-  $("body").mouseup(function () {
+  $("body").mouseup(() => {
     game.startGame();
   });
 
-  $("#main_menu_btn").click(function () {
+  $("#main_menu_btn").click(() => {
     window.location = "/index.html";
   });
 
-  game.on("all_stage_finished", function (score) {
-    setTimeout(function () {
+  // Event handlers
+  game.on("all_stage_finished", (score) => {
+    setTimeout(() => {
       clearInterval(intervalId);
       updateScore(score);
       $("#main_menu_btn").show().removeClass("d-none");
     }, 500);
   });
 
-  game.on("no_more_life", function (score) {
-    setTimeout(function () {
+  game.on("no_more_life", (score) => {
+    setTimeout(() => {
       clearInterval(intervalId);
       $("#main_menu_btn").show().removeClass("d-none");
     }, 500);
   });
+
+  function gameloop() {
+    game.draw();
+  }
 });

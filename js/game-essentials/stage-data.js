@@ -1,4 +1,3 @@
-
 // Stage datas is array of each stage information.
 //  It is 20 x 20 grid.
 let stageDatas = [
@@ -36,7 +35,6 @@ let stageDatas = [
       vertical: 2,
       horizontal: 2,
     },
-    soundId: "gameplay_pursuit",
     brickHeight: 40,
     colorByType: {
       1: "#01a900",
@@ -48,7 +46,7 @@ let stageDatas = [
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -62,7 +60,6 @@ let stageDatas = [
       vertical: 2,
       horizontal: 2,
     },
-    soundId: "gameplay_mission",
     brickHeight: 40,
     colorByType: {
       1: "#01a900",

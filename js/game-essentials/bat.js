@@ -9,13 +9,13 @@ class Bat {
 
     this.margin = 5;
 
-    let height = 20;
+    const rectHeight = 20;
 
     this.rect = {
       x: this.margin,
       y: 0,
       width: (windowWidth / 100.0) * this.widthPercentageOfWindow,
-      height: height,
+      height: rectHeight,
     };
     this.canvasRect = {
       x: 0,
@@ -35,22 +35,6 @@ class Bat {
     this.ctx.canvas.style.position = "absolute";
   }
 
-  increaseSize() {
-    if (this.widthPercentageOfWindow < this.maxPercentage) {
-      this.widthPercentageOfWindow += 2;
-      this.rect.width =
-        (this.windowWidth / 100.0) * this.widthPercentageOfWindow;
-    }
-  }
-
-  decreaseSize() {
-    if (this.widthPercentageOfWindow > this.minPercentage) {
-      this.widthPercentageOfWindow -= 2;
-      this.rect.width =
-        (this.windowWidth / 100.0) * this.widthPercentageOfWindow;
-    }
-  }
-
   windowResized(windowWidth, windowHeight) {
     this.windowWidth = windowWidth;
     this.windowHeight = windowHeight;
@@ -60,7 +44,7 @@ class Bat {
 
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
 
-    this.rect.width = (windowWidth / 100.0) * this.widthPercentageOfWindow;
+    this.rect.width = (windowWidth / 100) * this.widthPercentageOfWindow;
     this.repositionBatInsideWindow();
     this.draw();
   }
@@ -97,18 +81,26 @@ class Bat {
   }
 
   centerTop() {
+    const centerX = this.rect.x + this.rect.width / 2;
+    const centerY = this.canvasRect.y;
+
     return {
-      x: this.rect.x + this.rect.width / 2.0,
-      y: this.canvasRect.y,
+      x: centerX,
+      y: centerY,
     };
   }
 
   relativeBatRect() {
+    const x = this.rect.x;
+    const y = this.canvasRect.y;
+    const width = this.rect.width;
+    const height = this.rect.height;
+
     return {
-      x: this.rect.x,
-      y: this.canvasRect.y,
-      width: this.rect.width,
-      height: this.rect.height,
+      x: x,
+      y: y,
+      width: width,
+      height: height,
     };
   }
 }

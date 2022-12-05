@@ -27,8 +27,7 @@ class Game {
     this.bat.windowResized(windowWidth, windowHeight);
 
     // ball setup
-    this.balls = [];
-    this.balls.push(new Ball());
+    this.balls = [new Ball()];
 
     // stage setup
     this.initialStageSetup(windowWidth, windowHeight, stageCanvas);
@@ -47,8 +46,8 @@ class Game {
     this.bat.windowResized(windowWidth, windowHeight);
 
     // ball update
-    for (let index = 0; index < this.balls.length; index++) {
-      this.balls[index].windowResized(windowWidth, windowHeight);
+    for (const ball of this.balls) {
+      ball.windowResized(windowWidth, windowHeight);
     }
 
     // stage update
@@ -67,12 +66,15 @@ class Game {
       stageDatas[this.currentStage],
       stageCanvas
     );
-    let self = this;
-    this.stage.on("end", function () {
+
+    const self = this;
+
+    this.stage.on("end", () => {
       self.moveToNextStage();
     });
+
     this.lastBrickCrackingHandler = undefined;
-    this.stage.on("last_brick", function (lastBrickRect) {
+    this.stage.on("last_brick", (lastBrickRect) => {
       self.handleLastBrickRemaining(lastBrickRect);
     });
   }
@@ -89,58 +91,53 @@ class Game {
   }
 
   operateBall() {
-    if (this.curState == this.state.waiting) {
+    if (this.curState === this.state.waiting) {
       // Ball will stick to the bat
-      let batTopCenter = this.bat.centerTop();
-      for (let index = 0; index < this.balls.length; index++) {
-        this.balls[index].stickBottomToPoint(batTopCenter.x, batTopCenter.y);
+      const batTopCenter = this.bat.centerTop();
+      for (const ball of this.balls) {
+        ball.stickBottomToPoint(batTopCenter.x, batTopCenter.y);
       }
     } else {
       // Ball will be moving in each frame
-      let extraBallsDroppedToBottom = [];
-      for (let index = 0; index < this.balls.length; index++) {
+      const extraBallsDroppedToBottom = [];
+      for (const ball of this.balls) {
         // window collision
-        let bottomCollided = this.balls[
-          index
-        ].handleCollisionWithWindowReportBottomCollision(
-          this.windowWidth,
-          this.windowHeight
-        );
+        const bottomCollided =
+          ball.handleCollisionWithWindowReportBottomCollision(
+            this.windowWidth,
+            this.windowHeight
+          );
         if (bottomCollided) {
-          if (this.balls.length == 1) {
+          if (this.balls.length === 1) {
             //last ball
-            this.lastBallDroppedToBottom();
+            this.handleLastBallDroppedToBottom();
           } else {
-            extraBallsDroppedToBottom.push(this.balls[index]);
+            extraBallsDroppedToBottom.push(ball);
           }
         }
 
         // bat collision
-        let batRect = this.bat.relativeBatRect();
-        const ballBatCollided = this.balls[index].handleCollisionWithBat(
+        const batRect = this.bat.relativeBatRect();
+        const ballBatCollided = ball.handleCollisionWithBat(
           batRect.x,
           batRect.width,
           batRect.y
         );
-        if (ballBatCollided) {
-        }
 
         // stage collision
         const brickCollisionResult =
-          this.stage.handleBrickCollisionWithBallAndReportCollision(
-            this.balls[index]
-          );
+          this.stage.handleBrickCollisionWithBallAndReportCollision(ball);
         if (brickCollisionResult) {
           this.stage.draw();
         }
-        this.balls[index].handleBrickCollisionResult(brickCollisionResult);
+        ball.handleBrickCollisionResult(brickCollisionResult);
 
         // move ball
-        this.balls[index].move();
+        ball.move();
       }
 
-      for (let index = 0; index < extraBallsDroppedToBottom.length; index++) {
-        let ballIndex = this.balls.indexOf(extraBallsDroppedToBottom[index]);
+      for (const ball of extraBallsDroppedToBottom) {
+        const ballIndex = this.balls.indexOf(ball);
         if (ballIndex > -1) {
           this.balls.splice(ballIndex, 1);
         }
@@ -169,31 +166,33 @@ class Game {
   }
 
   handleLastBrickRemaining(lastBrickRect) {
-    if (!this.lastBrickCrackingHandler && this.curState == this.state.running) {
+    if (
+      !this.lastBrickCrackingHandler &&
+      this.curState === this.state.running
+    ) {
       console.log("handle last brick remaining called");
       this.lastBrickCrackingHandler = new LastBrickCrackingHandler(
         30,
         lastBrickRect
       );
-      let self = this;
-      this.lastBrickCrackingHandler.on("end", function () {
+      const self = this;
+      this.lastBrickCrackingHandler.on("end", () => {
         self.lastBrickCrackingHandler = undefined;
         self.moveToNextStage();
       });
     }
   }
 
-  // Give appropriate name
-  lastBallDroppedToBottom() {
+  handleLastBallDroppedToBottom() {
     this.curState = this.state.waiting;
     this.lifeCount--;
 
     // Reset ball angles
-    for (let index = 0; index < this.balls.length; index++) {
-      this.balls[index].initialAngleSpeedSetup();
+    for (const ball of this.balls) {
+      ball.initialAngleSpeedSetup();
     }
 
-    if (this.lifeCount == 0) {
+    if (this.lifeCount === 0) {
       this.curState = this.state.no_more_life;
       if (this.callbacks["no_more_life"]) {
         this.callbacks["no_more_life"](this.stage.score);
@@ -214,8 +213,8 @@ class Game {
     this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight);
 
     if (
-      this.curState == this.state.no_more_stages ||
-      this.curState == this.state.no_more_life
+      this.curState === this.state.no_more_stages ||
+      this.curState === this.state.no_more_life
     ) {
       this.drawGameOver();
       this.drawScore();
@@ -229,8 +228,8 @@ class Game {
       this.operateBall();
 
       // ball drawing
-      for (let index = 0; index < this.balls.length; index++) {
-        this.balls[index].draw(this.ctx);
+      for (const ball of this.balls) {
+        ball.draw(this.ctx);
       }
 
       // last brick remaining time
@@ -239,22 +238,22 @@ class Game {
   }
 
   drawLife() {
-    let heartImage = document.getElementById("heart_image");
+    const heartImage = document.getElementById("heart_image");
 
-    let margin = 10;
-    let width = 40;
-    let height = 40;
+    const margin = 10;
+    const width = 40;
+    const height = 40;
 
     let curX = this.windowWidth - margin - width;
 
-    for (let index = 0; index < this.lifeCount; index++) {
+    for (let i = 0; i < this.lifeCount; i++) {
       this.ctx.drawImage(heartImage, curX, margin, width, height);
       curX -= margin + width;
     }
   }
 
   drawScore() {
-    let margin = 10;
+    const margin = 10;
 
     this.ctx.fillStyle = "#FFFFFF";
     this.ctx.font = "30px Comic Sans MS";
@@ -264,12 +263,13 @@ class Game {
   }
 
   drawStageName() {
-    let margin = 10;
+    const margin = 10;
 
     this.ctx.fillStyle = "#FFFFFF";
     this.ctx.font = "30px Comic Sans MS";
     this.ctx.textBaseline = "top";
     this.ctx.textAlign = "center";
+
     this.ctx.fillText(
       stageDatas[this.currentStage].name,
       this.windowWidth / 2,
@@ -278,9 +278,9 @@ class Game {
   }
 
   drawGameOver() {
-    let gameOverImage = document.getElementById("game_over_image");
+    const gameOverImage = document.getElementById("game_over_image");
 
-    let imageX = (this.windowWidth - gameOverImage.width) / 2;
+    const imageX = (this.windowWidth - gameOverImage.width) / 2;
 
     this.ctx.drawImage(gameOverImage, imageX, 50);
   }
@@ -291,6 +291,7 @@ class Game {
       this.ctx.font = "40px Comic Sans MS";
       this.ctx.textBaseline = "center";
       this.ctx.textAlign = "center";
+
       this.ctx.fillText(
         `${this.lastBrickCrackingHandler.remainingSeconds()}`,
         this.windowWidth / 2,
@@ -300,6 +301,6 @@ class Game {
   }
 
   decreaseLife() {
-    this.lastBallDroppedToBottom();
+    this.handleLastBallDroppedToBottom();
   }
 }

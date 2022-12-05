@@ -13,18 +13,6 @@ class Ball {
     this.minSpeed = 6;
   }
 
-  increaseSize() {
-    if (this.radius < this.maxRadius) {
-      this.radius += 2;
-    }
-  }
-
-  decreaseSize() {
-    if (this.radius > this.minRadius) {
-      this.radius -= 2;
-    }
-  }
-
   increaseSpeed() {
     if (this.speed < this.maxSpeed) {
       this.speed += 2;
@@ -39,27 +27,27 @@ class Ball {
     }
   }
 
-  initialAngleSpeedSetup(speed) {
-    this.speed = speed || 10;
+  initialAngleSpeedSetup(speed = 10) {
+    this.speed = speed;
     this.angle = Math.PI / 4;
     this.speedX = Math.cos(this.angle) * this.speed;
     this.speedY = -Math.sin(this.angle) * this.speed;
   }
 
   adjustNewSpeed() {
-    let prevSpeedX = this.speedX;
-    let prevSpeedY = this.speedY;
+    let previousX = this.speedX;
+    let previousY = this.speedY;
 
     this.speedX = Math.cos(this.angle) * this.speed;
     this.speedY = Math.sin(this.angle) * this.speed;
 
     // signs needed to be matched
-    if (prevSpeedX * this.speedX < 0) {
+    if (previousX * this.speedX < 0) {
       // their signs are opposite
       this.speedX *= -1;
     }
 
-    if (prevSpeedY * this.speedY < 0) {
+    if (previousY * this.speedY < 0) {
       // their signs are opposite
       this.speedY *= -1;
     }
@@ -93,34 +81,33 @@ class Ball {
   handleCollisionWithWindowReportBottomCollision(wWidth, wHeight) {
     let nextCenter = this.centerAfterNextMove();
 
-    // It can look optimized using one if, but this is more cleaner
-    if (nextCenter.centerX - this.radius < 0) {
-      this.flipSpeedHorizontally();
-    } else if (nextCenter.centerX + this.radius > wWidth) {
+    if (
+      nextCenter.centerX - this.radius < 0 ||
+      nextCenter.centerX + this.radius > wWidth
+    ) {
       this.flipSpeedHorizontally();
     }
 
-    // It can look optimized using one if, but this is more cleaner
     if (nextCenter.centerY - this.radius < 0) {
       this.flipSpeedVertically();
     } else if (nextCenter.centerY + this.radius > wHeight) {
-      // this.flipSpeedVertically()
       return true;
     }
-
     return false;
   }
 
   handleBrickCollisionResult(brickCollisionResult) {
-    if (brickCollisionResult) {
-      if (brickCollisionResult == "top" || brickCollisionResult == "bottom") {
+    if (!brickCollisionResult) return;
+
+    switch (brickCollisionResult) {
+      case "top":
+      case "bottom":
         this.flipSpeedVertically();
-      } else if (
-        brickCollisionResult == "left" ||
-        brickCollisionResult == "right"
-      ) {
+        break;
+      case "left":
+      case "right":
         this.flipSpeedHorizontally();
-      }
+        break;
     }
   }
 
@@ -132,9 +119,6 @@ class Ball {
       batX < nextCenter.centerX &&
       nextCenter.centerX < batX + batWidth
     ) {
-      //				   BAT
-      //	150 			90				30
-      //  Left 		  Middle			Right
       let batRightMostRadian = 0.523599; // 30 Degree
       let batLeftMostRadian = 2.61799; // 150 Degree
       let nintyDegreeInRadian = Math.PI / 2;
@@ -153,11 +137,10 @@ class Ball {
         this.angle > seventySixDegreeInRadian &&
         this.angle < hundredAndFourDegreeInRadian
       ) {
-        if (this.angle > nintyDegreeInRadian) {
-          this.angle = hundredAndFourDegreeInRadian;
-        } else {
-          this.angle = seventySixDegreeInRadian;
-        }
+        this.angle =
+          this.angle > nintyDegreeInRadian
+            ? hundredAndFourDegreeInRadian
+            : seventySixDegreeInRadian;
       }
 
       this.speedX = Math.cos(this.angle) * this.speed;
@@ -168,22 +151,9 @@ class Ball {
     }
   }
 
-  windowResized(wWidth, wHeight) {
-    if (this.centerX - this.radius < 0) {
-      this.centerX = this.radius;
-    }
-
-    if (this.centerX + this.radius > wWidth) {
-      this.centerX = wWidth - this.radius;
-    }
-
-    if (this.centerY - this.radius < 0) {
-      this.centerY = this.radius;
-    }
-
-    if (this.centerY + this.radius > wHeight) {
-      this.centerY = wHeight - this.radius;
-    }
+  windowResized(wWidth, wHeight, radius) {
+    this.centerX = Math.clamp(this.centerX, radius, wWidth - radius);
+    this.centerY = Math.clamp(this.centerY, radius, wHeight - radius);
   }
 
   draw(ctx) {
@@ -194,7 +164,6 @@ class Ball {
     ctx.fill();
   }
 
-  // returns hit direction `top`, `bottom`, `left`, `right`
   calculateHitDirectionWithRect(rect) {
     const nextCenter = this.centerAfterNextMove();
 
@@ -208,48 +177,32 @@ class Ball {
     const rectTopY = rect.y;
     const rectBottomY = rect.y + rect.height;
 
-    // top hit
     if (
       ballBottomY >= rectTopY &&
-      ballBottomY < rectBottomY &&
-      nextCenter.centerX >= rectLeftX &&
-      nextCenter.centerX <= rectRightX &&
-      this.speedY > 0
-    ) {
-      return "top";
-    }
-
-    // bottom hit
-    if (
-      ballTopY > rectTopY &&
       ballTopY <= rectBottomY &&
       nextCenter.centerX >= rectLeftX &&
-      nextCenter.centerX <= rectRightX &&
-      this.speedY < 0
+      nextCenter.centerX <= rectRightX
     ) {
-      return "bottom";
+      switch (true) {
+        case this.speedY > 0:
+          return "top";
+        case this.speedY < 0:
+          return "bottom";
+      }
     }
 
-    // left hit
     if (
       ballRightX >= rectLeftX &&
-      ballRightX < rectRightX &&
-      nextCenter.centerY >= rectTopY &&
-      nextCenter.centerY <= rectBottomY &&
-      this.speedX > 0
-    ) {
-      return "left";
-    }
-
-    // right hit
-    if (
       ballLeftX <= rectRightX &&
-      ballLeftX > rectLeftX &&
       nextCenter.centerY >= rectTopY &&
-      nextCenter.centerY <= rectBottomY &&
-      this.speedX < 0
+      nextCenter.centerY <= rectBottomY
     ) {
-      return "right";
+      switch (true) {
+        case this.speedX > 0:
+          return "left";
+        case this.speedX < 0:
+          return "right";
+      }
     }
 
     return undefined;
