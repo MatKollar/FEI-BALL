@@ -14,15 +14,14 @@ class Stage {
 
     this.score = 0;
 
-    this.ctx = canvas.getContext("2d", { alpha: false });
-    const { left, top, width, height } = canvas.getBoundingClientRect();
-    this.ctx.canvas.width = width;
-    this.ctx.canvas.height = height;
-    this.ctx.canvas.style.left = `${left}px`;
-    this.ctx.canvas.style.top = `${top}px`;
+    this.ctx = canvas.getContext("2d", {
+      alpha: false,
+    });
+    this.ctx.canvas.width = windowWidth;
+    this.ctx.canvas.height = windowHeight;
+    this.ctx.canvas.style.left = "0px";
+    this.ctx.canvas.style.top = "0px";
     this.ctx.canvas.style.position = "absolute";
-
-    window.addEventListener("resize", () => this.onResize());
 
     this.draw();
   }
@@ -117,7 +116,6 @@ class Stage {
           col
         );
 
-        // Stop iterating if the callback returned true
         if (stopIterating) {
           return;
         }

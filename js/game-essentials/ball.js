@@ -152,8 +152,21 @@ class Ball {
   }
 
   windowResized(wWidth, wHeight, radius) {
-    this.centerX = Math.clamp(this.centerX, radius, wWidth - radius);
-    this.centerY = Math.clamp(this.centerY, radius, wHeight - radius);
+    if (this.centerX - this.radius < 0) {
+      this.centerX = this.radius;
+    }
+
+    if (this.centerX + this.radius > wWidth) {
+      this.centerX = wWidth - this.radius;
+    }
+
+    if (this.centerY - this.radius < 0) {
+      this.centerY = this.radius;
+    }
+
+    if (this.centerY + this.radius > wHeight) {
+      this.centerY = wHeight - this.radius;
+    }
   }
 
   draw(ctx) {
