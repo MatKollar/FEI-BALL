@@ -47,7 +47,7 @@ class Game {
 
     // ball update
     for (const ball of this.balls) {
-      ball.windowResized(windowWidth, windowHeight);
+      ball.updateWindowBounds(windowWidth, windowHeight);
     }
 
     // stage update
@@ -95,7 +95,7 @@ class Game {
       // Ball will stick to the bat
       const batTopCenter = this.bat.centerTop();
       for (const ball of this.balls) {
-        ball.stickBottomToPoint(batTopCenter.x, batTopCenter.y);
+        ball.alignBottomWithPoint(batTopCenter.x, batTopCenter.y);
       }
     } else {
       // Ball will be moving in each frame
@@ -103,7 +103,7 @@ class Game {
       for (const ball of this.balls) {
         // window collision
         const bottomCollided =
-          ball.handleCollisionWithWindowReportBottomCollision(
+          ball.handleWindowCollision(
             this.windowWidth,
             this.windowHeight
           );
@@ -118,7 +118,7 @@ class Game {
 
         // bat collision
         const batRect = this.bat.relativeBatRect();
-        const ballBatCollided = ball.handleCollisionWithBat(
+        const ballBatCollided = ball.handleBoardCollision(
           batRect.x,
           batRect.width,
           batRect.y
@@ -130,10 +130,9 @@ class Game {
         if (brickCollisionResult) {
           this.stage.draw();
         }
-        ball.handleBrickCollisionResult(brickCollisionResult);
+        ball.handleBrickCollision(brickCollisionResult);
 
-        // move ball
-        ball.move();
+        ball.moveBall();
       }
 
       for (const ball of extraBallsDroppedToBottom) {
@@ -189,7 +188,7 @@ class Game {
 
     // Reset ball angles
     for (const ball of this.balls) {
-      ball.initialAngleSpeedSetup();
+      ball.setInitialSpeedAndAngle();
     }
 
     if (this.lifeCount === 0) {

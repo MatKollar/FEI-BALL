@@ -70,7 +70,7 @@ class Stage {
     let collideResult = undefined;
     this.traverseBricks(function (brickValue, x, y, width, height, row, col) {
       if (brickValue > 0) {
-        const collide = ball.calculateHitDirectionWithRect({
+        const collide = ball.getHitDirectionWithBrick({
           x: x,
           y: y,
           width: width,
