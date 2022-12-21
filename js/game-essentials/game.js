@@ -23,8 +23,8 @@ class Game {
     this.lifeCount = 3;
 
     // bat setup
-    this.bat = new Bat(windowWidth, windowHeight, batCanvas);
-    this.bat.windowResized(windowWidth, windowHeight);
+    this.bat = new Board(windowWidth, windowHeight, batCanvas);
+    this.bat.updateScreenSize(windowWidth, windowHeight);
 
     // ball setup
     this.balls = [new Ball()];
@@ -43,11 +43,11 @@ class Game {
     this.ctx.canvas.height = windowHeight;
 
     // bat update
-    this.bat.windowResized(windowWidth, windowHeight);
+    this.bat.updateScreenSize(windowWidth, windowHeight);
 
     // ball update
     for (const ball of this.balls) {
-      ball.updateWindowBounds(windowWidth, windowHeight);
+      ball.updateScreenSize(windowWidth, windowHeight);
     }
 
     // stage update
@@ -93,7 +93,7 @@ class Game {
   operateBall() {
     if (this.curState === this.state.waiting) {
       // Ball will stick to the bat
-      const batTopCenter = this.bat.centerTop();
+      const batTopCenter = this.bat.getTopCenter();
       for (const ball of this.balls) {
         ball.alignBottomWithPoint(batTopCenter.x, batTopCenter.y);
       }
@@ -117,7 +117,7 @@ class Game {
         }
 
         // bat collision
-        const batRect = this.bat.relativeBatRect();
+        const batRect = this.bat.getRelativeBoardRect();
         const ballBatCollided = ball.handleBoardCollision(
           batRect.x,
           batRect.width,

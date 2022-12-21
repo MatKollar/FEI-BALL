@@ -43,7 +43,7 @@ class Ball {
     };
   }
 
-  updateWindowBounds(width, height) {
+  updateScreenSize(width, height) {
     this.centerX = Math.max(
       this.radius,
       Math.min(width - this.radius, this.centerX)
