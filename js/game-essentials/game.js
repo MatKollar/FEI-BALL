@@ -3,13 +3,6 @@ class Game {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
-    this.ctx = canvas.getContext("2d");
-    this.ctx.canvas.width = screenWidth;
-    this.ctx.canvas.height = screenHeight;
-    this.ctx.canvas.style.left = "0px";
-    this.ctx.canvas.style.top = "0px";
-    this.ctx.canvas.style.position = "absolute";
-
     this.state = {
       waiting: "WAITING",
       running: "RUNNING",
@@ -27,20 +20,25 @@ class Game {
 
     this.ball = new Ball();
 
+    this.ctx = canvas.getContext("2d");
+    this.ctx.canvas.width = screenWidth;
+    this.ctx.canvas.height = screenHeight;
+    this.ctx.canvas.style.left = "0px";
+    this.ctx.canvas.style.top = "0px";
+    this.ctx.canvas.style.position = "absolute";
+
     this.initialStageSetup(screenWidth, screenHeight, stageCanvas);
   }
 
   windowResized(screenWidth, screenHeight) {
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
-
     this.ctx.canvas.width = screenWidth;
     this.ctx.canvas.height = screenHeight;
 
     this.board.updateScreenSize(screenWidth, screenHeight);
     this.ball.updateScreenSize(screenWidth, screenHeight);
-
-    this.stage.windowResized(screenWidth, screenHeight);
+    this.stage.updateScreenSize(screenWidth, screenHeight);
   }
 
   mouseMoved(cursorX) {
@@ -93,25 +91,16 @@ class Game {
         this.screenHeight
       );
       if (bottomCollided) {
-        if (this.balls.length === 1) {
-          //last ball
-          this.handleLastBallDroppedToBottom();
-        } else {
-          extraBallsDroppedToBottom.push(ball);
-        }
+        this.handleLastBallDroppedToBottom();
       }
 
       // board collision
       const batRect = this.board.getRelativeBoardRect();
-      const ballBatCollided = this.ball.handleBoardCollision(
-        batRect.x,
-        batRect.width,
-        batRect.y
-      );
+      this.ball.handleBoardCollision(batRect.x, batRect.width, batRect.y);
 
       // stage collision
       const brickCollisionResult =
-        this.stage.handleBrickCollisionWithBallAndReportCollision(this.ball);
+        this.stage.detectAndHandleBrickCollisionWithBall(this.ball);
       if (brickCollisionResult) {
         this.stage.draw();
       }
@@ -165,7 +154,7 @@ class Game {
 
     // Reset ball angles
 
-    ball.setInitialSpeedAndAngle();
+    this.ball.setInitialSpeedAndAngle();
 
     if (this.lifeCount === 0) {
       this.curState = this.state.no_more_life;
