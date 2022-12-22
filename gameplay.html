@@ -2,15 +2,12 @@
 <html>
   <head>
     <title>DX-BALL</title>
-    <!-- <link rel="stylesheet" href="/lib/css/bootstrap.min.css" /> -->
-    <!-- CSS only -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-    <!-- JavaScript Bundle with Popper -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
@@ -21,11 +18,7 @@
       integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
       crossorigin="anonymous"
     ></script>
-    <!-- <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/lib/js/bootstrap.min.js"></script> -->
-
     <link rel="stylesheet" href="./css/gameplay.css" />
-
     <script
       type="text/javascript"
       src="./js/game-essentials/last_brick_cracking_handler.js"
@@ -38,8 +31,8 @@
     <script type="text/javascript" src="./js/game-essentials/stage.js"></script>
     <script type="text/javascript" src="./js/game-essentials/board.js"></script>
     <script type="text/javascript" src="./js/game-essentials/ball.js"></script>
-    <script type="text/javascript" src="./js/game-essentials/game.js"></script>
-    <script type="text/javascript" src="./js/gameplay.js"></script>
+    <script type="text/javascript" src="./js/game-essentials/logic.js"></script>
+    <script type="text/javascript" src="./js/game.js"></script>
   </head>
 
   <body style="background-color: black">
@@ -62,16 +55,11 @@
       height="400px"
     ></canvas>
 
+    <img src="./images/life.png" style="display: none" id="life" alt="" />
     <img
-      src="./images/heart_40x40.png"
+      src="./images/gameover.png"
       style="display: none"
-      id="heart_image"
-      alt=""
-    />
-    <img
-      src="./images/game_over.png"
-      style="display: none"
-      id="game_over_image"
+      id="gameover"
       alt=""
     />
 
