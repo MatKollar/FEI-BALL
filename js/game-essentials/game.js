@@ -1,11 +1,11 @@
 class Game {
-  constructor(windowWidth, windowHeight, canvas, batCanvas, stageCanvas) {
-    this.windowWidth = windowWidth;
-    this.windowHeight = windowHeight;
+  constructor(screenWidth, screenHeight, canvas, boardCanvas, stageCanvas) {
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
 
     this.ctx = canvas.getContext("2d");
-    this.ctx.canvas.width = windowWidth;
-    this.ctx.canvas.height = windowHeight;
+    this.ctx.canvas.width = screenWidth;
+    this.ctx.canvas.height = screenHeight;
     this.ctx.canvas.style.left = "0px";
     this.ctx.canvas.style.top = "0px";
     this.ctx.canvas.style.position = "absolute";
@@ -22,47 +22,36 @@ class Game {
 
     this.lifeCount = 3;
 
-    // bat setup
-    this.bat = new Board(windowWidth, windowHeight, batCanvas);
-    this.bat.updateScreenSize(windowWidth, windowHeight);
+    this.board = new Board(screenWidth, screenHeight, boardCanvas);
+    this.board.updateScreenSize(screenWidth, screenHeight);
 
-    // ball setup
-    this.balls = [new Ball()];
+    this.ball = new Ball();
 
-    // stage setup
-    this.initialStageSetup(windowWidth, windowHeight, stageCanvas);
+    this.initialStageSetup(screenWidth, screenHeight, stageCanvas);
   }
 
-  windowResized(windowWidth, windowHeight) {
-    // keep reference
-    this.windowWidth = windowWidth;
-    this.windowHeight = windowHeight;
+  windowResized(screenWidth, screenHeight) {
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
 
-    // canvas update
-    this.ctx.canvas.width = windowWidth;
-    this.ctx.canvas.height = windowHeight;
+    this.ctx.canvas.width = screenWidth;
+    this.ctx.canvas.height = screenHeight;
 
-    // bat update
-    this.bat.updateScreenSize(windowWidth, windowHeight);
+    this.board.updateScreenSize(screenWidth, screenHeight);
+    this.ball.updateScreenSize(screenWidth, screenHeight);
 
-    // ball update
-    for (const ball of this.balls) {
-      ball.updateScreenSize(windowWidth, windowHeight);
-    }
-
-    // stage update
-    this.stage.windowResized(windowWidth, windowHeight);
+    this.stage.windowResized(screenWidth, screenHeight);
   }
 
   mouseMoved(cursorX) {
-    this.bat.mouseMoved(cursorX);
+    this.board.mouseMoved(cursorX);
   }
 
-  initialStageSetup(windowWidth, windowHeight, stageCanvas) {
+  initialStageSetup(screenWidth, screenHeight, stageCanvas) {
     this.currentStage = 0;
     this.stage = new Stage(
-      windowWidth,
-      windowHeight,
+      screenWidth,
+      screenHeight,
       stageDatas[this.currentStage],
       stageCanvas
     );
@@ -92,55 +81,43 @@ class Game {
 
   operateBall() {
     if (this.curState === this.state.waiting) {
-      // Ball will stick to the bat
-      const batTopCenter = this.bat.getTopCenter();
-      for (const ball of this.balls) {
-        ball.alignBottomWithPoint(batTopCenter.x, batTopCenter.y);
-      }
+      // Ball will stick to the board
+      const batTopCenter = this.board.getTopCenter();
+      this.ball.alignBottomWithPoint(batTopCenter.x, batTopCenter.y);
     } else {
       // Ball will be moving in each frame
       const extraBallsDroppedToBottom = [];
-      for (const ball of this.balls) {
-        // window collision
-        const bottomCollided =
-          ball.handleWindowCollision(
-            this.windowWidth,
-            this.windowHeight
-          );
-        if (bottomCollided) {
-          if (this.balls.length === 1) {
-            //last ball
-            this.handleLastBallDroppedToBottom();
-          } else {
-            extraBallsDroppedToBottom.push(ball);
-          }
-        }
-
-        // bat collision
-        const batRect = this.bat.getRelativeBoardRect();
-        const ballBatCollided = ball.handleBoardCollision(
-          batRect.x,
-          batRect.width,
-          batRect.y
-        );
-
-        // stage collision
-        const brickCollisionResult =
-          this.stage.handleBrickCollisionWithBallAndReportCollision(ball);
-        if (brickCollisionResult) {
-          this.stage.draw();
-        }
-        ball.handleBrickCollision(brickCollisionResult);
-
-        ball.moveBall();
-      }
-
-      for (const ball of extraBallsDroppedToBottom) {
-        const ballIndex = this.balls.indexOf(ball);
-        if (ballIndex > -1) {
-          this.balls.splice(ballIndex, 1);
+      // window collision
+      const bottomCollided = this.ball.handleWindowCollision(
+        this.screenWidth,
+        this.screenHeight
+      );
+      if (bottomCollided) {
+        if (this.balls.length === 1) {
+          //last ball
+          this.handleLastBallDroppedToBottom();
+        } else {
+          extraBallsDroppedToBottom.push(ball);
         }
       }
+
+      // board collision
+      const batRect = this.board.getRelativeBoardRect();
+      const ballBatCollided = this.ball.handleBoardCollision(
+        batRect.x,
+        batRect.width,
+        batRect.y
+      );
+
+      // stage collision
+      const brickCollisionResult =
+        this.stage.handleBrickCollisionWithBallAndReportCollision(this.ball);
+      if (brickCollisionResult) {
+        this.stage.draw();
+      }
+      this.ball.handleBrickCollision(brickCollisionResult);
+
+      this.ball.moveBall();
     }
   }
 
@@ -187,9 +164,8 @@ class Game {
     this.lifeCount--;
 
     // Reset ball angles
-    for (const ball of this.balls) {
-      ball.setInitialSpeedAndAngle();
-    }
+
+    ball.setInitialSpeedAndAngle();
 
     if (this.lifeCount === 0) {
       this.curState = this.state.no_more_life;
@@ -209,7 +185,7 @@ class Game {
   }
 
   draw() {
-    this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight);
+    this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
     if (
       this.curState === this.state.no_more_stages ||
@@ -227,9 +203,8 @@ class Game {
       this.operateBall();
 
       // ball drawing
-      for (const ball of this.balls) {
-        ball.draw(this.ctx);
-      }
+
+      this.ball.draw(this.ctx);
 
       // last brick remaining time
       this.drawLastBrickRemainingTime();
@@ -243,7 +218,7 @@ class Game {
     const width = 40;
     const height = 40;
 
-    let curX = this.windowWidth - margin - width;
+    let curX = this.screenWidth - margin - width;
 
     for (let i = 0; i < this.lifeCount; i++) {
       this.ctx.drawImage(heartImage, curX, margin, width, height);
@@ -271,7 +246,7 @@ class Game {
 
     this.ctx.fillText(
       stageDatas[this.currentStage].name,
-      this.windowWidth / 2,
+      this.screenWidth / 2,
       margin
     );
   }
@@ -279,7 +254,7 @@ class Game {
   drawGameOver() {
     const gameOverImage = document.getElementById("game_over_image");
 
-    const imageX = (this.windowWidth - gameOverImage.width) / 2;
+    const imageX = (this.screenWidth - gameOverImage.width) / 2;
 
     this.ctx.drawImage(gameOverImage, imageX, 50);
   }
@@ -293,8 +268,8 @@ class Game {
 
       this.ctx.fillText(
         `${this.lastBrickCrackingHandler.remainingSeconds()}`,
-        this.windowWidth / 2,
-        this.windowHeight / 2
+        this.screenWidth / 2,
+        this.screenHeight / 2
       );
     }
   }
