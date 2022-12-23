@@ -74,8 +74,8 @@ class GameLogic {
     const { stage, ctx } = this;
     ctx.textBaseline = "top";
     ctx.textAlign = "left";
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "25px Verdana";
+    ctx.fillStyle = "black";
+    ctx.font = "bold 30px Roboto";
     ctx.fillText(`Score : ${stage.score}`, margin, margin);
   }
 
@@ -84,8 +84,8 @@ class GameLogic {
     const { currentStage, screenWidth, ctx } = this;
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
-    ctx.fillStyle = "#FFFFFF";
-    ctx.font = "30px Verdana";
+    ctx.fillStyle = "black";
+    ctx.font = "bold 35px Roboto";
     ctx.fillText(this.stageDatas[currentStage].name, screenWidth / 2, margin);
   }
 

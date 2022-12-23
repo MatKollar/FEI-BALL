@@ -4,8 +4,8 @@
     "col": 15,
     "row": 8,
     "gap": {
-      "vertical": 5,
-      "horizontal": 5
+      "vertical": 7,
+      "horizontal": 7
     },
     "brickHeight": 40,
     "colorByType": {

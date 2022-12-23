@@ -36,6 +36,9 @@ class Stage {
       if (brickValue > 0) {
         brickCount++;
         brickRect = { x, y, width, height };
+        this.ctx.strokeStyle = "black";
+        this.ctx.lineWidth = 5;
+        this.ctx.strokeRect(x, y, width, height);
         this.ctx.fillStyle = this.stageData.colorByType[brickValue];
         this.ctx.fillRect(x, y, width, height);
       }
@@ -65,7 +68,7 @@ class Stage {
   }
 
   clearDrawing() {
-    this.ctx.fillStyle = "black";
+    this.ctx.fillStyle = "white";
     this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   }
 

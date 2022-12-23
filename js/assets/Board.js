@@ -1,11 +1,11 @@
 class Board {
   constructor(screenWidth, screenHeight, canvas) {
-    this.margin = 10;
+    this.margin = 30;
     this.rectangle = {
       x: this.margin,
       y: 0,
       width: (screenWidth / 100) * 14,
-      height: 20,
+      height: 30,
     };
     this.canvasRect = {
       x: 0,
@@ -25,6 +25,8 @@ class Board {
   draw() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     this.ctx.fillStyle = "white";
+    this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.ctx.fillStyle = "black";
     this.ctx.fillRect(
       this.rectangle.x,
       this.rectangle.y,

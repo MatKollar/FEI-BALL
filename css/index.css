@@ -3,3 +3,44 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+.title {
+    font-size: 70px;
+    margin: 100px auto;
+    cursor: pointer;
+    width: 15%;
+}
+
+.menu {
+    text-align: center;
+    width: 15%;
+    margin: 0 auto;
+}
+
+.option {
+    padding: 10px;
+    font-size: 30px;
+    margin: 20px auto;
+    cursor: pointer;
+    border: 1px solid blue;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 255, 0.477);
+    transition: all 0.2s ease-in-out;
+}
+
+.option:hover {
+    transform: scale(1.1);
+}

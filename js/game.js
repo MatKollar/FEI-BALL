@@ -1,6 +1,4 @@
 $(document).ready(() => {
-  let stageDatas;
-
   fetch("stage_data.json")
     .then((response) => response.json())
     .then((data) => {
