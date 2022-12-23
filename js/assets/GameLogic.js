@@ -1,8 +1,15 @@
-class Game {
-  constructor(screenWidth, screenHeight, canvas, boardCanvas, stageCanvas) {
+class GameLogic {
+  constructor(
+    screenWidth,
+    screenHeight,
+    canvas,
+    boardCanvas,
+    stageCanvas,
+    stageDatas
+  ) {
     this.lifeCount = 3;
     this.ball = new Ball();
-
+    this.stageDatas = stageDatas;
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
@@ -79,7 +86,7 @@ class Game {
     ctx.textAlign = "center";
     ctx.fillStyle = "#FFFFFF";
     ctx.font = "30px Verdana";
-    ctx.fillText(stageDatas[currentStage].name, screenWidth / 2, margin);
+    ctx.fillText(this.stageDatas[currentStage].name, screenWidth / 2, margin);
   }
 
   drawGameOver() {
@@ -133,10 +140,11 @@ class Game {
 
   initializeStage(screenWidth, screenHeight, stageCanvas) {
     this.currentStage = 0;
+    console.log(this.stageDatas);
     this.stage = new Stage(
       screenWidth,
       screenHeight,
-      stageDatas[this.currentStage],
+      this.stageDatas[this.currentStage],
       stageCanvas
     );
 
@@ -222,10 +230,10 @@ class Game {
       this.lastBrickCrackingHandler = undefined;
     }
 
-    if (this.currentStage < stageDatas.length - 1) {
+    if (this.currentStage < this.stageDatas.length - 1) {
       this.currentStage++;
       this.curState = this.state.waiting;
-      this.stage.setNewStageData(stageDatas[this.currentStage]);
+      this.stage.setNewStageData(this.stageDatas[this.currentStage]);
       this.stage.draw();
     } else {
       this.curState = this.state.no_more_stages;

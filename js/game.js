@@ -1,39 +1,50 @@
 $(document).ready(() => {
-  const game = new Game(
+  let stageDatas;
+
+  fetch("stage_data.json")
+    .then((response) => response.json())
+    .then((data) => {
+      startGame(data);
+    });
+});
+
+const startGame = (stageDatas) => {
+  const gameLogic = new GameLogic(
     window.innerWidth,
     window.innerHeight,
     $("#canvas")[0],
     $("#bat_canvas")[0],
-    $("#stage_canvas")[0]
+    $("#stage_canvas")[0],
+    stageDatas
   );
   const fps = 60;
   const intervalId = setInterval(gameloop, 1000 / fps);
   const $mainMenuBtn = $("#main_menu_btn");
 
   $(window).resize(() => {
-    game.updateScreenSize(window.innerWidth, window.innerHeight);
+    gameLogic.updateScreenSize(window.innerWidth, window.innerHeight);
   });
 
   $("body").mousemove((event) => {
-    game.mouseMoved(event.clientX);
+    gameLogic.mouseMoved(event.clientX);
   });
 
   $("body").mouseup(() => {
-    game.startGame();
+    gameLogic.startGame();
   });
 
   $mainMenuBtn.click(() => {
     window.location = "/index.html";
   });
 
-  game.on("all_stage_finished", (score) => {
+  gameLogic.on("all_stage_finished", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenuBtn.show().removeClass("d-none");
     }, 500);
   });
 
-  game.on("no_more_life", (score) => {
+  gameLogic.on("no_more_life", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenuBtn.show().removeClass("d-none");
@@ -41,6 +52,6 @@ $(document).ready(() => {
   });
 
   function gameloop() {
-    game.draw();
+    gameLogic.draw();
   }
-});
+};
