@@ -1,0 +1,11 @@
+.print {
+  display: none;
+}
+
+.back_button {
+  display: none;
+}
+
+.img_pc {
+  display: block;
+}

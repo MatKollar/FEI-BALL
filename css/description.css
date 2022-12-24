@@ -18,6 +18,20 @@ a {
   color: black;
 }
 
+.print {
+  text-align: center;
+  width: 120px;
+  z-index: 5;
+  padding: 10px;
+  font-size: 20px;
+  margin: 20px;
+  cursor: pointer;
+  border: 1px solid blue;
+  border-radius: 10px;
+  background-color: rgb(133, 133, 255);
+  transition: all 0.2s ease-in-out;
+}
+
 .back_button {
   width: 150px;
   z-index: 5;
@@ -31,7 +45,7 @@ a {
   transition: all 0.2s ease-in-out;
 }
 
-.back_button:hover {
+.print:hover {
   transform: scale(1.1);
 }
 
