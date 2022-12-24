@@ -1,46 +1,52 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
+  background-image: url("../images/FEI_BALL_BG.png");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: contain;
+  z-index: -1;
 }
 
 a {
-    text-decoration: none;
-    color: black;
+  text-decoration: none;
+  color: black;
 }
 
 .wrapper {
-    text-align: center;
+  text-align: center;
 }
 
 .title {
-    font-size: 70px;
-    margin: 100px auto;
-    cursor: pointer;
-    width: 15%;
+  font-size: 70px;
+  margin: 100px auto;
+  cursor: pointer;
+  width: 300px;
 }
 
 .menu {
-    text-align: center;
-    width: 15%;
-    margin: 0 auto;
+  text-align: center;
+  width: 250px;
+  margin: 0 auto;
 }
 
 .option {
-    padding: 10px;
-    font-size: 30px;
-    margin: 20px auto;
-    cursor: pointer;
-    border: 1px solid blue;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 255, 0.477);
-    transition: all 0.2s ease-in-out;
+  z-index: 5;
+  padding: 10px;
+  font-size: 30px;
+  margin: 20px auto;
+  cursor: pointer;
+  border: 1px solid blue;
+  border-radius: 10px;
+  background-color: rgb(133, 133, 255);
+  transition: all 0.2s ease-in-out;
 }
 
 .option:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }

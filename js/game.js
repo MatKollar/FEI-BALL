@@ -50,14 +50,14 @@ const startGame = (stageDatas) => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenuBtn.show().removeClass("d-none");
-    }, 500);
+    }, 50);
   });
 
   gameLogic.on("gameover", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenuBtn.show().removeClass("d-none");
-    }, 500);
+    }, 50);
   });
 
   function gameloop() {

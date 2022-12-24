@@ -43,11 +43,12 @@ class GameLogic {
     if (this.timer.remainingSeconds() === 0) {
       this.handleGameOver();
     }
+    console.log(this.curState);
 
     switch (this.curState) {
       case this.state.no_more_stages:
       case this.state.gameover:
-        this.drawGameOverScreen();
+        this.drawGameOver();
         this.drawLevelName();
         this.drawScore();
         break;
