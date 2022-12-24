@@ -54,7 +54,7 @@
     ></canvas>
     <canvas
       style="z-index: 3; position: absolute"
-      id="bat_canvas"
+      id="board_canvas"
       width="600px"
       height="400px"
     ></canvas>
@@ -64,8 +64,24 @@
       src="./images/gameover.png"
       style="display: none"
       id="gameover"
-      alt=""
+      alt="gameover"
     />
+
+    <img
+      src="./images/Victory.png"
+      style="display: none"
+      id="victory"
+      alt="victory"
+    />
+
+    <div id="pauseMenu" class="centered">
+      <a href=""><div class="option top">RESTART</div></a>
+      <a href="./index.html"><div class="option">MAIN MENU</div></a>
+    </div>
+
+    <div id="mainMenu" class="centered">
+      <a href="./index.html"><div class="option">MAIN MENU</div></a>
+    </div>
 
     <button
       class="btn btn-outline-success d-none centered"

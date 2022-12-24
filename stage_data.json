@@ -27,7 +27,7 @@
   },
   {
     "name": "OS (Stage 2)",
-    "time": 30,
+    "time": 500,
     "gap": {
       "vertical": 2,
       "horizontal": 2

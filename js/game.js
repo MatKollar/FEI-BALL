@@ -11,13 +11,15 @@ const startGame = (stageDatas) => {
     window.innerWidth,
     window.innerHeight,
     $("#canvas")[0],
-    $("#bat_canvas")[0],
+    $("#board_canvas")[0],
     $("#stage_canvas")[0],
     stageDatas
   );
   const fps = 60;
   const intervalId = setInterval(gameloop, 1000 / fps);
-  const $mainMenuBtn = $("#main_menu_btn");
+  const $pauseMenu = $("#pauseMenu");
+  const $mainMenu = $("#mainMenu");
+  const $resume = $("#resume");
 
   $(window).resize(() => {
     gameLogic.updateScreenSize(window.innerWidth, window.innerHeight);
@@ -34,29 +36,38 @@ const startGame = (stageDatas) => {
   $(document).on("keydown", (event) => {
     if (event.keyCode === 27) {
       gameLogic.pauseGame();
-      if ($mainMenuBtn.is(":visible")) {
-        $mainMenuBtn.hide();
+      if ($pauseMenu.is(":visible")) {
+        $pauseMenu.hide();
       } else {
-        $mainMenuBtn.show().removeClass("d-none");
+        $pauseMenu.show().removeClass("d-none");
       }
     }
   });
 
-  $mainMenuBtn.click(() => {
+  $resume.click(() => {
+    gameLogic.pauseGame();
+    if ($pauseMenu.is(":visible")) {
+      $pauseMenu.hide();
+    } else {
+      $pauseMenu.show().removeClass("d-none");
+    }
+  });
+
+  $pauseMenu.click(() => {
     window.location = "/index.html";
   });
 
-  gameLogic.on("all_stage_finished", (score) => {
+  gameLogic.on("victory", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
-      $mainMenuBtn.show().removeClass("d-none");
+      $mainMenu.show().removeClass("d-none");
     }, 50);
   });
 
   gameLogic.on("gameover", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
-      $mainMenuBtn.show().removeClass("d-none");
+      $pauseMenu.show().removeClass("d-none");
     }, 50);
   });
 

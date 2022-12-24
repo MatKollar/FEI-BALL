@@ -22,7 +22,7 @@ class GameLogic {
       running: "RUNNING",
       paused: "PAUSED",
       gameover: "GAMEOVER",
-      no_more_stages: "NO_MORE_STAGES",
+      victory: "VICTORY",
     };
     this.curState = this.state.waiting;
     this.prevState = this.state.waiting;
@@ -46,7 +46,11 @@ class GameLogic {
     console.log(this.curState);
 
     switch (this.curState) {
-      case this.state.no_more_stages:
+      case this.state.victory:
+        this.drawVictory();
+        this.drawLevelName();
+        this.drawScore();
+        break;
       case this.state.gameover:
         this.drawGameOver();
         this.drawLevelName();
@@ -108,6 +112,12 @@ class GameLogic {
     ctx.fillStyle = "black";
     ctx.font = "bold 35px Roboto";
     ctx.fillText(this.stageDatas[currentStage].name, screenWidth / 2, margin);
+  }
+
+  drawVictory() {
+    const gameOverImage = document.getElementById("victory");
+    const x = (this.screenWidth - gameOverImage.width) / 2;
+    this.ctx.drawImage(gameOverImage, x, 10);
   }
 
   drawGameOver() {
@@ -239,9 +249,9 @@ class GameLogic {
       this.timer = new Timer(this.stageDatas[this.currentStage].time);
       this.stage.draw();
     } else {
-      this.switchState(this.state.no_more_stages);
-      if (this.callbacks["all_stage_finished"]) {
-        this.callbacks["all_stage_finished"](this.stage.score);
+      this.switchState(this.state.victory);
+      if (this.callbacks["victory"]) {
+        this.callbacks["victory"](this.stage.score);
       }
       this.stage.clearDrawing();
     }
