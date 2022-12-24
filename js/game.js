@@ -42,7 +42,7 @@ const startGame = (stageDatas) => {
     }, 500);
   });
 
-  gameLogic.on("no_more_life", (score) => {
+  gameLogic.on("gameover", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenuBtn.show().removeClass("d-none");

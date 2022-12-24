@@ -1,41 +1,19 @@
 class Timer {
-  constructor(expirationInSeconds) {
-    this.expirationInSeconds = expirationInSeconds;
+  constructor(timeout) {
+    this.timeout = timeout;
     this.counter = 0;
-    let self = this;
-    this.timerId = setInterval(function () {
-      self.handler();
-    }, 1000);
-    this.callback = {};
-  }
-
-  handler() {
-    if (this.counter == this.expirationInSeconds) {
-      clearInterval(this.timerId);
-      if (this.callback["end"]) {
-        this.callback["end"]();
-      }
-    } else {
-      this.counter++;
-      if (this.callback["update"]) {
-        this.callback["update"]();
-      }
-    }
-  }
-
-  passedSeconds() {
-    return this.counter;
+    this.timerId = setInterval(() => this.handler(), 1000);
   }
 
   remainingSeconds() {
-    return this.expirationInSeconds - this.counter;
+    return this.timeout - this.counter;
   }
 
-  on(event, callback) {
-    this.callback[event] = callback;
-  }
-
-  stop() {
-    clearInterval(this.timerId);
+  handler() {
+    if (this.counter == this.timeout) {
+      clearInterval(this.timerId);
+    } else {
+      this.counter++;
+    }
   }
 }

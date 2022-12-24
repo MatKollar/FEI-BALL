@@ -5,7 +5,7 @@ class Stage {
 
     this.score = 0;
     this.stageData = stageData;
-    console.log(stageData);
+
     this.callbacks = {};
 
     this.margin = {

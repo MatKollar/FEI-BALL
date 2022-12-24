@@ -20,7 +20,7 @@ class GameLogic {
     this.state = {
       waiting: "WAITING",
       running: "RUNNING",
-      no_more_life: "NO_MORE_LIFE",
+      gameover: "GAMEOVER",
       no_more_stages: "NO_MORE_STAGES",
     };
     this.curState = this.state.waiting;
@@ -38,9 +38,13 @@ class GameLogic {
   draw() {
     this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
 
+    if (this.timer.remainingSeconds() === 0) {
+      this.handleGameOver();
+    }
+
     if (
       this.curState === this.state.no_more_stages ||
-      this.curState === this.state.no_more_life
+      this.curState === this.state.gameover
     ) {
       this.drawGameOver();
       this.drawLevelName();
@@ -51,7 +55,7 @@ class GameLogic {
       this.updateBallState();
       this.drawLifesRemaining();
       this.drawScore();
-      this.drawLastBrickRemainingTime();
+      this.drawTime();
     }
   }
 
@@ -95,19 +99,15 @@ class GameLogic {
     this.ctx.drawImage(gameOverImage, x, 100);
   }
 
-  drawLastBrickRemainingTime() {
-    const { lastBrickCrackingHandler, ctx, screenWidth, screenHeight } = this;
-    if (lastBrickCrackingHandler) {
-      ctx.fillStyle = "#FF0000";
-      ctx.font = "40px Verdana MS";
+  drawTime() {
+    const { timer, ctx, screenWidth } = this;
+    if (timer) {
+      ctx.fillStyle = "black";
+      ctx.font = "Bold 37px Roboto";
       ctx.textBaseline = "center";
       ctx.textAlign = "center";
 
-      ctx.fillText(
-        `${lastBrickCrackingHandler.remainingSeconds()}`,
-        screenWidth / 2,
-        screenHeight / 2
-      );
+      ctx.fillText(`${timer.remainingSeconds()}`, screenWidth / 2, 65);
     }
   }
 
@@ -117,10 +117,6 @@ class GameLogic {
 
   on(event, callback) {
     this.callbacks[event] = callback;
-  }
-
-  decreaseLife() {
-    this.processLastBallDrop();
   }
 
   updateScreenSize(screenWidth, screenHeight) {
@@ -140,7 +136,6 @@ class GameLogic {
 
   initializeStage(screenWidth, screenHeight, stageCanvas) {
     this.currentStage = 0;
-    console.log(this.stageDatas);
     this.stage = new Stage(
       screenWidth,
       screenHeight,
@@ -148,10 +143,7 @@ class GameLogic {
       stageCanvas
     );
 
-    this.lastBrickCrackingHandler = undefined;
-    this.stage.on("last_brick", (lastBrickRect) => {
-      this.handleLastBrickRemaining(lastBrickRect);
-    });
+    this.timer = new Timer(this.stageDatas[this.currentStage].time);
 
     this.stage.on("end", () => {
       this.proceedToNextLevel();
@@ -191,55 +183,33 @@ class GameLogic {
   processLastBallDrop() {
     this.lifeCount--;
     if (this.lifeCount === 0) {
-      this.curState = this.state.no_more_life;
-      if (this.callbacks["no_more_life"]) {
-        this.callbacks["no_more_life"](this.stage.score);
-        this.stage.clearDrawing();
-      }
-      if (this.lastBrickCrackingHandler) {
-        this.lastBrickCrackingHandler.handleStagePassed();
-        this.lastBrickCrackingHandler = undefined;
-      }
+      this.handleGameOver();
     } else {
       this.curState = this.state.waiting;
       this.ball.setInitialSpeedAndAngle();
     }
   }
 
-  handleLastBrickRemaining(lastBrickRect) {
-    if (
-      !this.lastBrickCrackingHandler &&
-      this.curState === this.state.running
-    ) {
-      console.log("handle last brick remaining called");
-      this.lastBrickCrackingHandler = new LastBrickCrackingHandler(
-        30,
-        lastBrickRect
-      );
-      const self = this;
-      this.lastBrickCrackingHandler.on("end", () => {
-        self.lastBrickCrackingHandler = undefined;
-        self.proceedToNextLevel();
-      });
-    }
-  }
-
   proceedToNextLevel() {
-    if (this.lastBrickCrackingHandler) {
-      this.lastBrickCrackingHandler.handleStagePassed();
-      this.lastBrickCrackingHandler = undefined;
-    }
-
     if (this.currentStage < this.stageDatas.length - 1) {
       this.currentStage++;
       this.curState = this.state.waiting;
       this.stage.setNewStageData(this.stageDatas[this.currentStage]);
+      this.timer = new Timer(this.stageDatas[this.currentStage].time);
       this.stage.draw();
     } else {
       this.curState = this.state.no_more_stages;
       if (this.callbacks["all_stage_finished"]) {
         this.callbacks["all_stage_finished"](this.stage.score);
       }
+      this.stage.clearDrawing();
+    }
+  }
+
+  handleGameOver() {
+    this.curState = this.state.gameover;
+    if (this.callbacks["gameover"]) {
+      this.callbacks["gameover"](this.stage.score);
       this.stage.clearDrawing();
     }
   }
