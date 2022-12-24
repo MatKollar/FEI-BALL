@@ -43,7 +43,6 @@ class GameLogic {
     if (this.timer.remainingSeconds() === 0) {
       this.handleGameOver();
     }
-    console.log(this.curState);
 
     switch (this.curState) {
       case this.state.victory:
