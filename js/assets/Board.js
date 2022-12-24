@@ -1,6 +1,6 @@
 class Board {
   constructor(screenWidth, screenHeight, canvas) {
-    this.margin = 30;
+    this.margin = 20;
     this.rectangle = {
       x: this.margin,
       y: 0,
@@ -13,6 +13,9 @@ class Board {
       width: screenWidth,
       height: this.margin + this.rectangle.height,
     };
+
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
 
     this.ctx = canvas.getContext("2d", { alpha: false });
     this.ctx.canvas.width = this.canvasRect.width;
@@ -60,9 +63,13 @@ class Board {
   }
 
   updateScreenSize(screenWidth, screenHeight) {
+    this.screenWidth = screenWidth;
+    this.screenHeight = screenHeight;
     this.rectangle.width = (screenWidth / 100) * 14;
     this.canvasRect.y = screenHeight - this.margin - this.rectangle.height;
     this.canvasRect.width = screenWidth;
+    this.ctx.canvas.width = screenWidth;
+    this.ctx.canvas.height = screenHeight;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
     this.changeBoardPosition();
     this.draw();
@@ -76,12 +83,11 @@ class Board {
 
   changeBoardPosition() {
     if (this.rectangle.x < this.margin) {
-      this.rectangle.x = this.margin;
+      this.rectangle.x = 0;
     }
 
-    const maxX = this.screenWidth - this.rectangle.width - this.margin;
-    if (this.rectangle.x + this.rectangle.width > maxX) {
-      this.rectangle.x = maxX;
+    if (this.rectangle.x + this.rectangle.width > this.screenWidth) {
+      this.rectangle.x = this.screenWidth - this.rectangle.width;
     }
   }
 }
