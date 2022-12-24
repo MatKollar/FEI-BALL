@@ -20,10 +20,12 @@ class GameLogic {
     this.state = {
       waiting: "WAITING",
       running: "RUNNING",
+      paused: "PAUSED",
       gameover: "GAMEOVER",
       no_more_stages: "NO_MORE_STAGES",
     };
     this.curState = this.state.waiting;
+    this.prevState = this.state.waiting;
 
     this.ctx = canvas.getContext("2d");
     this.ctx.canvas.width = screenWidth;
@@ -42,21 +44,35 @@ class GameLogic {
       this.handleGameOver();
     }
 
-    if (
-      this.curState === this.state.no_more_stages ||
-      this.curState === this.state.gameover
-    ) {
-      this.drawGameOver();
-      this.drawLevelName();
-      this.drawScore();
-    } else {
-      this.drawLevelName();
-      this.ball.draw(this.ctx);
-      this.updateBallState();
-      this.drawLifesRemaining();
-      this.drawScore();
-      this.drawTime();
+    switch (this.curState) {
+      case this.state.no_more_stages:
+      case this.state.gameover:
+        this.drawGameOverScreen();
+        this.drawLevelName();
+        this.drawScore();
+        break;
+      case this.state.paused:
+        this.drawBall();
+        this.drawLevelName();
+        this.drawScore();
+        this.drawLifesRemaining();
+        this.pauseTimer();
+        this.drawTime();
+        break;
+      default:
+        this.resumeTimer();
+        this.drawLevelName();
+        this.drawBall();
+        this.updateBallState();
+        this.drawLifesRemaining();
+        this.drawScore();
+        this.drawTime();
+        break;
     }
+  }
+
+  drawBall() {
+    this.ball.draw(this.ctx);
   }
 
   drawLifesRemaining() {
@@ -112,7 +128,24 @@ class GameLogic {
   }
 
   startGame() {
-    this.curState = this.state.running;
+    this.switchState(this.state.running);
+  }
+
+  pauseGame() {
+    if (this.curState === this.state.paused) {
+      this.switchState(this.prevState);
+    } else {
+      this.prevState = this.curState;
+      this.switchState(this.state.paused);
+    }
+  }
+
+  pauseTimer() {
+    this.timer.pause();
+  }
+
+  resumeTimer() {
+    this.timer.resume();
   }
 
   on(event, callback) {
@@ -131,7 +164,9 @@ class GameLogic {
   }
 
   mouseMoved(cursorX) {
-    this.board.mouseMoved(cursorX);
+    if (this.curState !== this.state.paused) {
+      this.board.mouseMoved(cursorX);
+    }
   }
 
   initializeStage(screenWidth, screenHeight, stageCanvas) {
@@ -148,6 +183,11 @@ class GameLogic {
     this.stage.on("end", () => {
       this.proceedToNextLevel();
     });
+  }
+
+  switchState(newState) {
+    this.prevState = this.curState;
+    this.curState = newState;
   }
 
   updateBallState() {
@@ -185,7 +225,7 @@ class GameLogic {
     if (this.lifeCount === 0) {
       this.handleGameOver();
     } else {
-      this.curState = this.state.waiting;
+      this.switchState(this.state.waiting);
       this.ball.setInitialSpeedAndAngle();
     }
   }
@@ -193,12 +233,12 @@ class GameLogic {
   proceedToNextLevel() {
     if (this.currentStage < this.stageDatas.length - 1) {
       this.currentStage++;
-      this.curState = this.state.waiting;
+      this.switchState(this.state.waiting);
       this.stage.setNewStageData(this.stageDatas[this.currentStage]);
       this.timer = new Timer(this.stageDatas[this.currentStage].time);
       this.stage.draw();
     } else {
-      this.curState = this.state.no_more_stages;
+      this.switchState(this.state.no_more_stages);
       if (this.callbacks["all_stage_finished"]) {
         this.callbacks["all_stage_finished"](this.stage.score);
       }
@@ -207,7 +247,7 @@ class GameLogic {
   }
 
   handleGameOver() {
-    this.curState = this.state.gameover;
+    this.switchState(this.state.gameover);
     if (this.callbacks["gameover"]) {
       this.callbacks["gameover"](this.stage.score);
       this.stage.clearDrawing();

@@ -31,6 +31,17 @@ const startGame = (stageDatas) => {
     gameLogic.startGame();
   });
 
+  $(document).on("keydown", (event) => {
+    if (event.keyCode === 27) {
+      gameLogic.pauseGame();
+      if ($mainMenuBtn.is(":visible")) {
+        $mainMenuBtn.hide();
+      } else {
+        $mainMenuBtn.show().removeClass("d-none");
+      }
+    }
+  });
+
   $mainMenuBtn.click(() => {
     window.location = "/index.html";
   });
