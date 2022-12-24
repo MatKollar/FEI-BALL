@@ -9,7 +9,7 @@ body {
   background-image: url("../images/FEI_BALL_BG.png");
   background-attachment: fixed;
   background-position: center;
-  background-size: contain;
+  background-size: cover;
   z-index: -1;
 }
 
@@ -18,28 +18,12 @@ a {
   color: black;
 }
 
-.wrapper {
-  text-align: center;
-}
-
-.title {
-  font-size: 70px;
-  margin: 100px auto;
-  cursor: pointer;
-  width: 300px;
-}
-
-.menu {
-  text-align: center;
-  width: 250px;
-  margin: 0 auto;
-}
-
-.option {
+.back_button {
+  width: 150px;
   z-index: 5;
   padding: 10px;
-  font-size: 30px;
-  margin: 20px auto;
+  font-size: 20px;
+  margin: 100px auto;
   cursor: pointer;
   border: 1px solid blue;
   border-radius: 10px;
@@ -47,21 +31,35 @@ a {
   transition: all 0.2s ease-in-out;
 }
 
-.option:hover {
+.back_button:hover {
   transform: scale(1.1);
 }
 
+.wrapper {
+  margin: 150px auto;
+  text-align: center;
+  width: 550px;
+}
+
+.wrapper > p {
+  font-size: 20px;
+  margin-top: 100px;
+}
+
 @media only screen and (max-width: 600px) {
-  .title {
-    font-size: 50px;
-    width: 250px;
+  .back_button {
+    width: 100px;
+    font-size: 16px;
+    margin: 50px auto;
   }
 
-  .menu {
-    width: 200px;
+  .wrapper {
+    margin: 50px auto;
+    width: 90%;
   }
 
-  .option {
-    font-size: 20px;
+  .wrapper > p {
+    font-size: 16px;
+    margin-top: 50px;
   }
 }
