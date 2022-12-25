@@ -10,8 +10,8 @@ class GameLogic {
   ) {
     this.lifeCount = 3;
     this.difficulty = difficulty;
-    this.ball = new Ball();
     this.stageData = stageData;
+    this.ball;
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
@@ -148,6 +148,7 @@ class GameLogic {
       stageCanvas
     );
 
+    this.ball = new Ball(this.stageData[this.currentLevel].speed);
     this.timer = new Timer(this.stageData[this.currentLevel].time);
 
     this.stage.on("end", () => {

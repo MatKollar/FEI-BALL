@@ -1,11 +1,12 @@
 class Ball {
-  constructor(initialCenterX, initialCenterY, initialSpeed, initialRadius) {
-    this.radius = initialRadius || 14;
+  constructor(speed) {
+    this.radius = 13;
 
-    this.centerX = initialCenterX || this.radius;
-    this.centerY = initialCenterY || this.radius;
+    this.centerX = this.radius;
+    this.centerY = this.radius;
+    this.speed = speed;
 
-    this.setInitialSpeedAndAngle(initialSpeed);
+    this.setInitialAngle(speed);
   }
 
   draw(ctx) {
@@ -16,8 +17,7 @@ class Ball {
     ctx.fill();
   }
 
-  setInitialSpeedAndAngle(speed = 10) {
-    this.speed = speed;
+  setInitialAngle() {
     this.angle = Math.PI / 4;
     this.speedX = Math.cos(this.angle) * this.speed;
     this.speedY = -Math.sin(this.angle) * this.speed;
