@@ -277,7 +277,19 @@ class GameLogic {
 
   proceedToNextLevel() {
     this.passedLevels.push(this.stageData[this.currentLevel].name);
+
+    // Save the passed levels array to local storage
+    window.localStorage.setItem(
+      "passed_levels",
+      JSON.stringify(this.passedLevels)
+    );
+
     if (this.passedLevels.length - 1 < this.availableLevels - 1) {
+      // Load the passed levels array from local storage
+      this.passedLevels = JSON.parse(
+        window.localStorage.getItem("passed_levels")
+      );
+
       this.currentLevel = this.pickLevel();
       this.switchState(this.state.waiting);
       this.stage.setNewStageData(this.stageData[this.currentLevel]);
