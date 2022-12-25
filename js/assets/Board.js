@@ -97,6 +97,7 @@ class Board {
     this.ctx.canvas.width = screenWidth;
     this.ctx.canvas.height = screenHeight;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
+    this.rectangle.x = this.rectangle.x / this.screenWidth * screenWidth;
     this.changeBoardPosition();
     this.draw();
   }

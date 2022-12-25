@@ -41,11 +41,20 @@ class GameLogic {
     this.ctx.canvas.style.position = "absolute";
 
     this.initializeStage(screenWidth, screenHeight, stageCanvas);
+    this.isMobile = "DeviceOrientationEvent" in window;
+    if (this.isMobile) {
+      window.addEventListener(
+        "deviceorientation",
+        this.handleOrientation.bind(this)
+      );
+    }
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
-    this.board.draw(); // Add this line
+    if (!this.isMobile) {
+      this.board.draw();
+    }
 
     if (this.timer.remainingSeconds() === 0) {
       this.handleGameOver();
@@ -142,6 +151,15 @@ class GameLogic {
 
       ctx.fillText(`${timer.remainingSeconds()}`, screenWidth / 2, 65);
     }
+  }
+
+  handleOrientation(e) {
+    const maxAngle = 45;
+    const angle = Math.min(Math.max(e.gamma, -maxAngle), maxAngle);
+    const percent = angle / maxAngle;
+    this.board.rectangle.x =
+      percent * (this.screenWidth - this.board.rectangle.width);
+    this.board.draw();
   }
 
   initializeStage(screenWidth, screenHeight, stageCanvas) {
