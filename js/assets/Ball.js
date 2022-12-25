@@ -6,7 +6,7 @@ class Ball {
     this.centerY = this.radius;
     this.speed = speed;
 
-    this.setInitialAngle(speed);
+    this.setInitialAngle();
   }
 
   draw(ctx) {

@@ -42,10 +42,6 @@ const startGame = (stageData, difficulty) => {
     gameLogic.updateScreenSize(window.innerWidth, window.innerHeight);
   });
 
-  $("body").mousemove((event) => {
-    gameLogic.mouseMoved(event.clientX);
-  });
-
   $("body").mouseup(() => {
     gameLogic.startGame();
   });

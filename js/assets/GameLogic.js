@@ -16,6 +16,9 @@ class GameLogic {
     this.screenHeight = screenHeight;
 
     this.board = new Board(screenWidth, screenHeight, boardCanvas);
+    canvas.addEventListener("mousedown", this.board.dragStart.bind(this.board));
+    canvas.addEventListener("mouseup", this.board.dragEnd.bind(this.board));
+    canvas.addEventListener("mousemove", this.board.drag.bind(this.board));
     this.board.updateScreenSize(screenWidth, screenHeight);
     this.callbacks = {};
     this.passedLevels = [];
@@ -42,6 +45,7 @@ class GameLogic {
 
   draw() {
     this.ctx.clearRect(0, 0, this.screenWidth, this.screenHeight);
+    this.board.draw(); // Add this line
 
     if (this.timer.remainingSeconds() === 0) {
       this.handleGameOver();
@@ -225,11 +229,11 @@ class GameLogic {
     this.stage.updateScreenSize(screenWidth, screenHeight);
   }
 
-  mouseMoved(cursorX) {
-    if (this.curState !== this.state.paused) {
-      this.board.mouseMoved(cursorX);
-    }
-  }
+  // mouseMoved(cursorX) {
+  //   if (this.curState !== this.state.paused) {
+  //     this.board.mouseMoved(cursorX);
+  //   }
+  // }
 
   switchState(newState) {
     this.prevState = this.curState;

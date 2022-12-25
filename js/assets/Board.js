@@ -11,7 +11,7 @@ class Board {
       x: 0,
       y: screenHeight - this.margin - this.rectangle.height,
       width: screenWidth,
-      height: this.margin + this.rectangle.height,
+      height: screenHeight,
     };
 
     this.screenWidth = screenWidth;
@@ -23,6 +23,11 @@ class Board {
     this.ctx.canvas.style.position = "absolute";
     this.ctx.canvas.style.left = `${this.canvasRect.x}px`;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
+
+    this.ctx = canvas.getContext("2d", { alpha: false });
+    canvas.addEventListener("mousedown", this.dragStart.bind(this));
+    canvas.addEventListener("mouseup", this.dragEnd.bind(this));
+    canvas.addEventListener("mousemove", this.drag.bind(this));
   }
 
   draw() {
@@ -36,6 +41,27 @@ class Board {
       this.rectangle.width,
       this.rectangle.height
     );
+  }
+
+  dragStart(e) {
+    this.isDragging = true;
+    this.initialX = e.clientX - this.rectangle.x;
+    this.initialY = e.clientY - this.canvasRect.y;
+  }
+
+  dragEnd(e) {
+    this.isDragging = false;
+  }
+
+  drag(e) {
+    if (this.isDragging) {
+      e.preventDefault();
+      const rect = e.target.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      this.rectangle.x = x - this.initialX;
+      this.changeBoardPosition();
+      this.draw();
+    }
   }
 
   getTopCenter() {
@@ -71,12 +97,6 @@ class Board {
     this.ctx.canvas.width = screenWidth;
     this.ctx.canvas.height = screenHeight;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
-    this.changeBoardPosition();
-    this.draw();
-  }
-
-  mouseMoved(cursorX) {
-    this.rectangle.x = cursorX - this.rectangle.width / 2;
     this.changeBoardPosition();
     this.draw();
   }
