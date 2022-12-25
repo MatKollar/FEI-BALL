@@ -2,6 +2,7 @@
   {
     "name": "Level5 (HARD)",
     "time": 30,
+    "difficulty": "EASY",
     "gap": {
       "vertical": 7,
       "horizontal": 7
@@ -28,6 +29,7 @@
   {
     "name": "OS (Stage 2)",
     "time": 500,
+    "difficulty": "HARD",
     "gap": {
       "vertical": 2,
       "horizontal": 2

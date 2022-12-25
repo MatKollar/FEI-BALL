@@ -2,18 +2,35 @@ $(document).ready(() => {
   fetch("stage_data.json")
     .then((response) => response.json())
     .then((data) => {
-      startGame(data);
+      chooseDifficulty(data);
     });
 });
 
-const startGame = (stageDatas) => {
+const chooseDifficulty = (stageData) => {
+  const $difficultyPage = $("#difficulty");
+  const $easy = $("#easy");
+  const $hard = $("#hard");
+
+  $easy.click(() => {
+    $difficultyPage.hide();
+    startGame(stageData, "EASY");
+  });
+
+  $hard.click(() => {
+    $difficultyPage.hide();
+    startGame(stageData, "HARD");
+  });
+};
+
+const startGame = (stageData, difficulty) => {
   const gameLogic = new GameLogic(
     window.innerWidth,
     window.innerHeight,
     $("#canvas")[0],
     $("#board_canvas")[0],
     $("#stage_canvas")[0],
-    stageDatas
+    stageData,
+    difficulty
   );
   const fps = 60;
   const intervalId = setInterval(gameloop, 1000 / fps);

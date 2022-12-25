@@ -5,11 +5,13 @@ class GameLogic {
     canvas,
     boardCanvas,
     stageCanvas,
-    stageDatas
+    stageData,
+    difficulty
   ) {
     this.lifeCount = 3;
+    this.difficulty = difficulty;
     this.ball = new Ball();
-    this.stageDatas = stageDatas;
+    this.stageData = stageData;
     this.screenWidth = screenWidth;
     this.screenHeight = screenHeight;
 
@@ -105,12 +107,12 @@ class GameLogic {
 
   drawLevelName() {
     const margin = 20;
-    const { currentStage, screenWidth, ctx } = this;
+    const { currentLevel, screenWidth, ctx } = this;
     ctx.textBaseline = "top";
     ctx.textAlign = "center";
     ctx.fillStyle = "black";
     ctx.font = "bold 35px Roboto";
-    ctx.fillText(this.stageDatas[currentStage].name, screenWidth / 2, margin);
+    ctx.fillText(this.stageData[currentLevel].name, screenWidth / 2, margin);
   }
 
   drawVictory() {
@@ -135,6 +137,38 @@ class GameLogic {
 
       ctx.fillText(`${timer.remainingSeconds()}`, screenWidth / 2, 65);
     }
+  }
+
+  initializeStage(screenWidth, screenHeight, stageCanvas) {
+    this.currentLevel = this.pickLevel();
+    this.stage = new Stage(
+      screenWidth,
+      screenHeight,
+      this.stageData[this.currentLevel],
+      stageCanvas
+    );
+
+    this.timer = new Timer(this.stageData[this.currentLevel].time);
+
+    this.stage.on("end", () => {
+      this.proceedToNextLevel();
+    });
+  }
+
+  pickLevel() {
+    let level;
+
+    do {
+      level = this.getRandomNumber(0, this.stageData.length - 1);
+    } while (this.stageData[level].difficulty !== this.difficulty);
+
+    return level;
+  }
+
+  getRandomNumber(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   startGame() {
@@ -177,22 +211,6 @@ class GameLogic {
     if (this.curState !== this.state.paused) {
       this.board.mouseMoved(cursorX);
     }
-  }
-
-  initializeStage(screenWidth, screenHeight, stageCanvas) {
-    this.currentStage = 0;
-    this.stage = new Stage(
-      screenWidth,
-      screenHeight,
-      this.stageDatas[this.currentStage],
-      stageCanvas
-    );
-
-    this.timer = new Timer(this.stageDatas[this.currentStage].time);
-
-    this.stage.on("end", () => {
-      this.proceedToNextLevel();
-    });
   }
 
   switchState(newState) {
@@ -241,11 +259,11 @@ class GameLogic {
   }
 
   proceedToNextLevel() {
-    if (this.currentStage < this.stageDatas.length - 1) {
-      this.currentStage++;
+    if (this.currentLevel < this.stageData.length - 1) {
+      this.currentLevel++;
       this.switchState(this.state.waiting);
-      this.stage.setNewStageData(this.stageDatas[this.currentStage]);
-      this.timer = new Timer(this.stageDatas[this.currentStage].time);
+      this.stage.setNewStageData(this.stageData[this.currentLevel]);
+      this.timer = new Timer(this.stageData[this.currentLevel].time);
       this.stage.draw();
     } else {
       this.switchState(this.state.victory);
