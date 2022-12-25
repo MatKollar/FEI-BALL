@@ -2,7 +2,7 @@ class Board {
   constructor(screenWidth, screenHeight, canvas) {
     this.margin = 20;
     this.rectangle = {
-      x: this.margin,
+      x: screenWidth / 2 - ((screenWidth / 100) * 14) / 2,
       y: 0,
       width: (screenWidth / 100) * 14,
       height: 30,
@@ -97,12 +97,13 @@ class Board {
     this.ctx.canvas.width = screenWidth;
     this.ctx.canvas.height = screenHeight;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
-    this.rectangle.x = this.rectangle.x / this.screenWidth * screenWidth;
+    this.rectangle.x = screenWidth / 2 - ((screenWidth / 100) * 14) / 2;
     this.changeBoardPosition();
     this.draw();
   }
 
   changeBoardPosition() {
+    console.log(this.rectangle.x);
     if (this.rectangle.x < this.margin) {
       this.rectangle.x = 0;
     }

@@ -154,10 +154,12 @@ class GameLogic {
   }
 
   handleOrientation(e) {
-    const maxAngle = 45;
+    const maxAngle = 90;
     const angle = Math.min(Math.max(e.gamma, -maxAngle), maxAngle);
     const percent = angle / maxAngle;
     this.board.rectangle.x =
+      this.screenWidth / 2 -
+      this.board.rectangle.width / 2 +
       percent * (this.screenWidth - this.board.rectangle.width);
     this.board.draw();
   }
@@ -300,14 +302,12 @@ class GameLogic {
   proceedToNextLevel() {
     this.passedLevels.push(this.stageData[this.currentLevel].name);
 
-    // Save the passed levels array to local storage
     window.localStorage.setItem(
       "passed_levels",
       JSON.stringify(this.passedLevels)
     );
 
     if (this.passedLevels.length - 1 < this.availableLevels - 1) {
-      // Load the passed levels array from local storage
       this.passedLevels = JSON.parse(
         window.localStorage.getItem("passed_levels")
       );
@@ -318,12 +318,17 @@ class GameLogic {
       this.timer = new Timer(this.stageData[this.currentLevel].time);
       this.stage.draw();
     } else {
-      this.switchState(this.state.victory);
-      if (this.callbacks["victory"]) {
-        this.callbacks["victory"](this.stage.score);
-      }
-      this.stage.clearDrawing();
+      this.handleVictory();
     }
+  }
+
+  handleVictory() {
+    this.switchState(this.state.victory);
+    if (this.callbacks["victory"]) {
+      this.callbacks["victory"](this.stage.score);
+    }
+    this.stage.clearDrawing();
+    window.localStorage.clear();
   }
 
   handleGameOver() {
@@ -331,6 +336,7 @@ class GameLogic {
     if (this.callbacks["gameover"]) {
       this.callbacks["gameover"](this.stage.score);
       this.stage.clearDrawing();
+      window.localStorage.clear();
     }
   }
 }
