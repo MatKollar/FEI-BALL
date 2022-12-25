@@ -18,6 +18,7 @@ class GameLogic {
     this.board = new Board(screenWidth, screenHeight, boardCanvas);
     this.board.updateScreenSize(screenWidth, screenHeight);
     this.callbacks = {};
+    this.passedLevels = [];
 
     this.state = {
       waiting: "WAITING",
@@ -151,17 +152,33 @@ class GameLogic {
     this.ball = new Ball(this.stageData[this.currentLevel].speed);
     this.timer = new Timer(this.stageData[this.currentLevel].time);
 
+    this.availableLevels = this.countLevels();
+
     this.stage.on("end", () => {
       this.proceedToNextLevel();
     });
   }
 
+  countLevels() {
+    let count = 0;
+
+    for (let i = 0; i < this.stageData.length; i++) {
+      if (this.stageData[i].difficulty === this.difficulty) {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
   pickLevel() {
     let level;
-
     do {
       level = this.getRandomNumber(0, this.stageData.length - 1);
-    } while (this.stageData[level].difficulty !== this.difficulty);
+    } while (
+      this.stageData[level].difficulty !== this.difficulty ||
+      this.passedLevels.includes(this.stageData[level].name)
+    );
 
     return level;
   }
@@ -255,13 +272,13 @@ class GameLogic {
       this.handleGameOver();
     } else {
       this.switchState(this.state.waiting);
-      this.ball.setInitialSpeedAndAngle();
     }
   }
 
   proceedToNextLevel() {
-    if (this.currentLevel < this.stageData.length - 1) {
-      this.currentLevel++;
+    this.passedLevels.push(this.stageData[this.currentLevel].name);
+    if (this.passedLevels.length - 1 < this.availableLevels - 1) {
+      this.currentLevel = this.pickLevel();
       this.switchState(this.state.waiting);
       this.stage.setNewStageData(this.stageData[this.currentLevel]);
       this.timer = new Timer(this.stageData[this.currentLevel].time);

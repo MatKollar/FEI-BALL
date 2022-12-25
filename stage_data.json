@@ -1,7 +1,7 @@
 [
   {
     "name": "SWI",
-    "time": 30,
+    "time": 300,
     "difficulty": "EASY",
     "speed": 10,
     "gap": {
@@ -30,7 +30,7 @@
   },
   {
     "name": "UMI",
-    "time": 30,
+    "time": 300,
     "difficulty": "EASY",
     "speed": 10,
     "gap": {
@@ -58,7 +58,7 @@
   },
   {
     "name": "ZMP",
-    "time": 30,
+    "time": 300,
     "difficulty": "EASY",
     "speed": 10,
     "gap": {
@@ -86,7 +86,7 @@
   },
   {
     "name": "DBS",
-    "time": 30,
+    "time": 300,
     "difficulty": "EASY",
     "speed": 10,
     "gap": {
@@ -114,7 +114,7 @@
   },
   {
     "name": "OOP",
-    "time": 30,
+    "time": 200,
     "difficulty": "HARD",
     "speed": 15,
     "gap": {
@@ -144,7 +144,7 @@
   },
   {
     "name": "AZA",
-    "time": 30,
+    "time": 200,
     "difficulty": "HARD",
     "speed": 15,
     "gap": {
@@ -174,7 +174,7 @@
   },
   {
     "name": "MAT2",
-    "time": 30,
+    "time": 200,
     "difficulty": "HARD",
     "speed": 15,
     "gap": {
@@ -203,7 +203,7 @@
   },
   {
     "name": "LA2",
-    "time": 30,
+    "time": 200,
     "difficulty": "HARD",
     "speed": 15,
     "gap": {
@@ -233,7 +233,7 @@
   },
   {
     "name": "OS",
-    "time": 500,
+    "time": 200,
     "difficulty": "HARD",
     "speed": 25,
     "gap": {
