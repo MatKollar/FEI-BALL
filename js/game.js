@@ -36,14 +36,15 @@ const startGame = (stageData, difficulty) => {
   const intervalId = setInterval(gameloop, 1000 / fps);
   const $pauseMenu = $("#pauseMenu");
   const $mainMenu = $("#mainMenu");
-  const $resume = $("#resume");
 
   $(window).resize(() => {
     gameLogic.updateScreenSize(window.innerWidth, window.innerHeight);
   });
 
   $("body").mouseup(() => {
-    gameLogic.startGame();
+    if (gameLogic.curState !== "PAUSED") {
+      gameLogic.startGame();
+    }
   });
 
   $(document).on("keydown", (event) => {
@@ -57,19 +58,6 @@ const startGame = (stageData, difficulty) => {
     }
   });
 
-  $resume.click(() => {
-    gameLogic.pauseGame();
-    if ($pauseMenu.is(":visible")) {
-      $pauseMenu.hide();
-    } else {
-      $pauseMenu.show().removeClass("d-none");
-    }
-  });
-
-  $pauseMenu.click(() => {
-    window.location = "/index.html";
-  });
-
   gameLogic.on("victory", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
@@ -80,7 +68,7 @@ const startGame = (stageData, difficulty) => {
   gameLogic.on("gameover", (score) => {
     setTimeout(() => {
       clearInterval(intervalId);
-      $pauseMenu.show().removeClass("d-none");
+      $mainMenu.show().removeClass("d-none");
     }, 50);
   });
 

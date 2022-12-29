@@ -54,7 +54,7 @@ a {
 }
 
 .wrapper {
-  margin: 150px auto;
+  margin: 3% auto;
   text-align: center;
   width: 550px;
 }
@@ -120,5 +120,10 @@ img {
 
   .img_container {
     margin-top: 25px;
+  }
+
+  .print {
+    width: 100px;
+    font-size: 16px;
   }
 }

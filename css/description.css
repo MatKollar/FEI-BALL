@@ -50,7 +50,7 @@ a {
 }
 
 .wrapper {
-  margin: 150px auto;
+  margin: 5% auto;
   text-align: center;
   width: 550px;
 }
@@ -75,5 +75,10 @@ a {
   .wrapper > p {
     font-size: 16px;
     margin-top: 50px;
+  }
+
+  .print {
+    width: 100px;
+    font-size: 16px;
   }
 }

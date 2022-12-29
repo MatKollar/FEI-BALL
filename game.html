@@ -40,25 +40,6 @@
   </head>
 
   <body style="background-color: black">
-    <canvas
-      style="z-index: 1; position: absolute"
-      id="stage_canvas"
-      width="600px"
-      height="400px"
-    ></canvas>
-    <canvas
-      style="z-index: 2; position: absolute"
-      id="canvas"
-      width="600px"
-      height="400px"
-    ></canvas>
-    <canvas
-      style="z-index: 3; position: absolute"
-      id="board_canvas"
-      width="600px"
-      height="400px"
-    ></canvas>
-
     <img src="./images/life.png" style="display: none" id="life" alt="" />
     <img
       src="./images/gameover.png"
@@ -81,7 +62,7 @@
     </div>
 
     <div id="pauseMenu" class="centered">
-      <a href="" onClick="window.localStorage.clear();"
+      <a href="./game.html" onClick="window.localStorage.clear();"
         ><div class="option top">RESET</div></a
       >
       <a href="./index.html"><div class="option">MAIN MENU</div></a>
@@ -98,5 +79,9 @@
     >
       Main Menu
     </button>
+
+    <canvas style="z-index: 1; position: absolute" id="stage_canvas"></canvas>
+    <canvas style="z-index: 2; position: absolute" id="canvas"></canvas>
+    <canvas style="z-index: 3; position: absolute" id="board_canvas"></canvas>
   </body>
 </html>

@@ -249,12 +249,6 @@ class GameLogic {
     this.stage.updateScreenSize(screenWidth, screenHeight);
   }
 
-  // mouseMoved(cursorX) {
-  //   if (this.curState !== this.state.paused) {
-  //     this.board.mouseMoved(cursorX);
-  //   }
-  // }
-
   switchState(newState) {
     this.prevState = this.curState;
     this.curState = newState;
