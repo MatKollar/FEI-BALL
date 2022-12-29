@@ -19,7 +19,7 @@ class Board {
 
     this.ctx = canvas.getContext("2d", { alpha: false });
     this.ctx.canvas.width = this.canvasRect.width;
-    this.ctx.canvas.height = this.canvasRect.height;
+    this.ctx.canvas.height = 30;
     this.ctx.canvas.style.position = "absolute";
     this.ctx.canvas.style.left = `${this.canvasRect.x}px`;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
@@ -95,7 +95,6 @@ class Board {
     this.canvasRect.y = screenHeight - this.margin - this.rectangle.height;
     this.canvasRect.width = screenWidth;
     this.ctx.canvas.width = screenWidth;
-    this.ctx.canvas.height = screenHeight;
     this.ctx.canvas.style.top = `${this.canvasRect.y}px`;
     this.rectangle.x = screenWidth / 2 - ((screenWidth / 100) * 14) / 2;
     this.changeBoardPosition();
