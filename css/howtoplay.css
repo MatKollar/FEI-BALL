@@ -54,14 +54,14 @@ a {
 }
 
 .wrapper {
-  margin: 3% auto;
+  margin: 2% auto;
   text-align: center;
   width: 550px;
 }
 
 .wrapper > p {
   font-size: 20px;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .img_container {
