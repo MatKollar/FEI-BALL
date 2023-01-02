@@ -102,7 +102,6 @@ class Board {
   }
 
   changeBoardPosition() {
-    console.log(this.rectangle.x);
     if (this.rectangle.x < this.margin) {
       this.rectangle.x = 0;
     }

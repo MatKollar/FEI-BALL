@@ -4,15 +4,13 @@
     "time": 300,
     "difficulty": "EASY",
     "speed": 10,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 50,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 50,
+    "color": {
+      "1": "#07D600"
     },
     "col": 12,
     "row": 9,
@@ -33,15 +31,13 @@
     "time": 300,
     "difficulty": "EASY",
     "speed": 10,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 50,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 50,
+    "color": {
+      "1": "#07D600"
     },
     "col": 11,
     "row": 8,
@@ -61,15 +57,13 @@
     "time": 300,
     "difficulty": "EASY",
     "speed": 10,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 40,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 40,
+    "color": {
+      "1": "#07D600"
     },
     "col": 14,
     "row": 8,
@@ -89,15 +83,13 @@
     "time": 300,
     "difficulty": "EASY",
     "speed": 10,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 50,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 50,
+    "color": {
+      "1": "#07D600"
     },
     "col": 13,
     "row": 8,
@@ -113,19 +105,46 @@
     ]
   },
   {
+    "name": "API",
+    "time": 300,
+    "difficulty": "EASY",
+    "speed": 10,
+    "margin": {
+      "vertical": 7,
+      "horizontal": 7
+    },
+    "brickSize": 50,
+    "color": {
+      "1": "#07D600"
+    },
+    "col": 11,
+    "row": 9,
+    "data": [
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+      [1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+      [1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+      [1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1],
+      [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+      [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+      [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+      [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1]
+    ]
+  },
+  {
     "name": "OOP",
     "time": 200,
     "difficulty": "HARD",
     "speed": 15,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 40,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 40,
+    "color": {
+      "1": "#07D600",
+      "2": "#00BDD8",
+      "3": "#A50000"
     },
     "col": 15,
     "row": 10,
@@ -147,15 +166,15 @@
     "time": 200,
     "difficulty": "HARD",
     "speed": 15,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 40,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 40,
+    "color": {
+      "1": "#07D600",
+      "2": "#00BDD8",
+      "3": "#A50000"
     },
     "col": 15,
     "row": 10,
@@ -177,15 +196,15 @@
     "time": 200,
     "difficulty": "HARD",
     "speed": 15,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 40,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 40,
+    "color": {
+      "1": "#07D600",
+      "2": "#00BDD8",
+      "3": "#A50000"
     },
     "col": 18,
     "row": 9,
@@ -206,15 +225,15 @@
     "time": 200,
     "difficulty": "HARD",
     "speed": 15,
-    "gap": {
+    "margin": {
       "vertical": 7,
       "horizontal": 7
     },
-    "brickHeight": 40,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000"
+    "brickSize": 40,
+    "color": {
+      "1": "#07D600",
+      "2": "#00BDD8",
+      "3": "#A50000"
     },
     "col": 14,
     "row": 10,
@@ -236,15 +255,15 @@
     "time": 200,
     "difficulty": "HARD",
     "speed": 25,
-    "gap": {
+    "margin": {
       "vertical": 2,
       "horizontal": 2
     },
-    "brickHeight": 40,
-    "colorByType": {
-      "1": "#01a900",
-      "2": "#00a8d5",
-      "3": "#770000",
+    "brickSize": 40,
+    "color": {
+      "1": "#07D600",
+      "2": "#00BDD8",
+      "3": "#A50000",
       "4": "#000000"
     },
     "col": 16,

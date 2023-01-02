@@ -8,6 +8,12 @@ class Stage {
 
     this.callbacks = {};
 
+    this.ctx.canvas.width = screenWidth;
+    this.ctx.canvas.height = screenHeight;
+    this.ctx.canvas.style.position = "absolute";
+    this.ctx.canvas.style.left = "0px";
+    this.ctx.canvas.style.top = "0px";
+
     this.margin = {
       top: 50,
       left: 50,
@@ -18,11 +24,6 @@ class Stage {
     this.ctx = canvas.getContext("2d", {
       alpha: false,
     });
-    this.ctx.canvas.width = screenWidth;
-    this.ctx.canvas.height = screenHeight;
-    this.ctx.canvas.style.position = "absolute";
-    this.ctx.canvas.style.left = "0px";
-    this.ctx.canvas.style.top = "0px";
 
     this.draw();
   }
@@ -39,7 +40,7 @@ class Stage {
         this.ctx.strokeStyle = "black";
         this.ctx.lineWidth = 5;
         this.ctx.strokeRect(x, y, width, height);
-        this.ctx.fillStyle = this.stageData.colorByType[brickValue];
+        this.ctx.fillStyle = this.stageData.color[brickValue];
         this.ctx.fillRect(x, y, width, height);
       }
     });
@@ -76,21 +77,21 @@ class Stage {
     const { screenWidth, margin, stageData } = this;
     const availableWidth = screenWidth - margin.left - margin.right;
     const brickWidth =
-      availableWidth / stageData.col - stageData.gap.horizontal;
+      availableWidth / stageData.col - stageData.margin.horizontal;
 
     stageData.data.forEach((bricks, row) => {
       let y =
-        margin.top + row * (stageData.brickHeight + stageData.gap.vertical);
+        margin.top + row * (stageData.brickSize + stageData.margin.vertical);
 
       bricks.forEach((brickValue, col) => {
-        let x = margin.left + col * (brickWidth + stageData.gap.horizontal);
+        let x = margin.left + col * (brickWidth + stageData.margin.horizontal);
         if (
           iterationCallback(
             brickValue,
             x,
             y,
             brickWidth,
-            stageData.brickHeight,
+            stageData.brickSize,
             row,
             col
           )
