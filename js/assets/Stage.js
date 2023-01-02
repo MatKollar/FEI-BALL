@@ -6,6 +6,10 @@ class Stage {
     this.score = 0;
     this.stageData = stageData;
 
+    this.ctx = canvas.getContext("2d", {
+      alpha: false,
+    });
+
     this.callbacks = {};
 
     this.ctx.canvas.width = screenWidth;
@@ -20,10 +24,6 @@ class Stage {
       right: 50,
       bottom: 0,
     };
-
-    this.ctx = canvas.getContext("2d", {
-      alpha: false,
-    });
 
     this.draw();
   }
