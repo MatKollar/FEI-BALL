@@ -58,14 +58,14 @@ const startGame = (stageData, difficulty) => {
     }
   });
 
-  gameLogic.on("victory", (score) => {
+  gameLogic.on("victory", () => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenu.show().removeClass("d-none");
     }, 50);
   });
 
-  gameLogic.on("gameover", (score) => {
+  gameLogic.on("gameover", () => {
     setTimeout(() => {
       clearInterval(intervalId);
       $mainMenu.show().removeClass("d-none");
