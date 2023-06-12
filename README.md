@@ -1,4 +1,7 @@
-# ⚾ FEI-BALL
+<p align="center"><img src="./images/logo.png" alt="Logo" width="100"></p>
+<h1 align="center">⚾ FEI BALL</h1>
+
+
 Drag and drop JavaScript game inspired by DX-Ball.
 
 ## 📀 Installation
@@ -26,3 +29,4 @@ This game was inspired by DX-Ball. It is a brick-breaking game where the player 
 You can create or edit your own custom levels in the ```stage_data.json``` file.
 
 ## 📸 Screenshots
+![Game Screenshots](./images/screenshots.png)
